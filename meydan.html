@@ -3,127 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Özer Aşireti | Dijital Meydan ve Sosyal Ağ</title>
+    <title>Özer Aşireti | Dijital Meydan</title>
     <style>
-        :root { --ana-lacivert: #0a192f; --asiret-kirmizi: #b30000; --asiret-yesil: #1b5e20; --altin: #ffd700; }
-        body { margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f0f2f5; color: #333; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; }
+        .color-stripes { position: fixed; top: 0; width: 100%; z-index: 10002; }
+        .stripe-red { background: #b30000; height: 10px; }
+        .stripe-white { background: #ffffff; height: 8px; }
+        .stripe-green { background: #1b5e20; height: 8px; }
 
-        /* ÜST RENK ŞERİTLERİ (SAİT BEY'İN İMZASI) */
-        .stripes { position: fixed; top: 0; width: 100%; z-index: 2000; }
-        .s-red { background: var(--asiret-kirmizi); height: 8px; }
-        .s-white { background: #fff; height: 6px; }
-        .s-green { background: var(--asiret-yesil); height: 6px; }
+        .nav-bar { background: #0a192f; padding: 50px 20px 15px; text-align: center; border-bottom: 3px solid #ffd700; }
+        .nav-bar a { color: white; text-decoration: none; font-weight: bold; margin: 0 15px; font-size: 14px; }
 
-        /* NAVİGASYON */
-        .navbar { background: var(--ana-lacivert); color: white; padding: 40px 20px 15px; text-align: center; border-bottom: 3px solid var(--altin); }
-        .navbar a { color: var(--altin); text-decoration: none; font-weight: bold; margin: 0 15px; font-size: 14px; }
+        .container { max-width: 1000px; margin: 20px auto; display: grid; grid-template-columns: 1fr 300px; gap: 20px; padding: 0 20px; }
+        .chat-box { background: white; border-radius: 12px; height: 500px; display: flex; flex-direction: column; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .messages { flex: 1; padding: 20px; overflow-y: auto; background: #fafafa; border-radius: 12px 12px 0 0; }
+        .input-area { padding: 15px; border-top: 1px solid #eee; display: flex; gap: 10px; }
+        .input-area input { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 25px; outline: none; }
+        .send-btn { background: #b30000; color: white; border: none; padding: 10px 25px; border-radius: 25px; cursor: pointer; font-weight: bold; }
 
-        .container { max-width: 1100px; margin: 20px auto; display: grid; grid-template-columns: 300px 1fr 250px; gap: 20px; padding: 0 20px; }
-
-        /* SOL PANEL: PROFİLİM */
-        .profile-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; height: fit-content; }
-        .avatar-large { width: 80px; height: 80px; background: var(--ana-lacivert); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 15px; border: 3px solid var(--altin); }
-
-        /* ORTA PANEL: SOHBET VE MEYDAN */
-        .feed { background: white; border-radius: 12px; display: flex; flex-direction: column; box-shadow: 0 4px 10px rgba(0,0,0,0.1); height: 600px; }
-        .chat-header { padding: 15px; border-bottom: 1px solid #eee; font-weight: bold; color: var(--ana-lacivert); }
-        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; background: #fafafa; }
-        .chat-input-area { padding: 15px; border-top: 1px solid #eee; display: flex; gap: 10px; }
-        .chat-input-area input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 20px; outline: none; }
-        .send-btn { background: var(--asiret-kirmizi); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; }
-
-        /* SAĞ PANEL: KİMLER BURADA */
-        .users-list { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .user-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; font-size: 14px; }
-        .status-online { color: #4caf50; font-size: 10px; }
-
-        /* BUTONLAR */
-        .action-btn { background: #f0f2f5; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 11px; }
-        .action-btn:hover { background: var(--altin); }
-
-        .msg-bubble { background: white; padding: 10px 15px; border-radius: 15px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 4px solid var(--asiret-yesil); }
+        .user-list { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .user-item { padding: 10px 0; border-bottom: 1px solid #eee; font-size: 14px; color: #0a192f; font-weight: 500; }
+        .bubble { background: white; padding: 10px 15px; border-radius: 15px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 4px solid #1b5e20; }
     </style>
 </head>
 <body>
-
-    <div class="stripes">
-        <div class="s-red"></div>
-        <div class="s-white"></div>
-        <div class="s-green"></div>
+    <div class="color-stripes">
+        <div class="stripe-red"></div><div class="stripe-white"></div><div class="stripe-green"></div>
     </div>
 
-    <div class="navbar">
-        <h2>ÖZER AŞİRETİ DİJİTAL MEYDANI</h2>
-        <a href="index.html">← RESMİ MAKAMA DÖN</a>
-        <a href="#">REHBER</a>
-        <a href="#">YARDIMLAŞMA</a>
+    <div class="nav-bar">
+        <a href="index.html" style="color: #ffd700;">← RESMİ MAKAMA DÖN</a>
+        <a href="#" style="color: white;">MEYDAN KURALLARI</a>
     </div>
 
     <div class="container">
-        <div class="profile-card">
-            <div class="avatar-large" id="myAvatar">?</div>
-            <h3 id="myName" style="margin: 10px 0;">Misafir Üye</h3>
-            <p style="font-size: 12px; color: #777;">Özer Aşireti Dijital Kimliği</p>
-            <button onclick="kayitOl()" style="background: var(--ana-lacivert); color:white; border:none; padding:10px; width:100%; border-radius:5px; cursor:pointer;">İsim Güncelle</button>
-        </div>
-
-        <div class="feed">
-            <div class="chat-header">● Genel Meydan Hasbihali</div>
-            <div class="chat-messages" id="chatBox">
-                <div class="msg-bubble">
-                    <strong>Sait Bey Özel Kalem:</strong> Selamunaleyküm değerli aşiret mensupları. Meydanımız hayırlı olsun.
-                </div>
+        <div class="chat-box">
+            <div class="messages" id="chat">
+                <div class="bubble"><strong>Mehmet Bey:</strong> Selamunaleyküm, meydanımız hayırlı olsun.</div>
             </div>
-            <div class="chat-input-area">
-                <input type="text" id="msgInput" placeholder="Mesajınızı buraya yazın...">
-                <button class="send-btn" onclick="mesajGonder()">GÖNDER</button>
+            <div class="input-area">
+                <input type="text" id="userInput" placeholder="Adınız Soyadınız" style="width: 150px; flex: none;">
+                <input type="text" id="msgInput" placeholder="Mesajınızı yazın...">
+                <button class="send-btn" onclick="send()">GÖNDER</button>
             </div>
         </div>
 
-        <div class="users-list">
-            <h4 style="margin-top:0; border-bottom: 1px solid #eee; padding-bottom: 5px;">Aktif Kişiler</h4>
-            <div id="onlineList">
-                <div class="user-row">
-                    <span>Mehmet Bey</span>
-                    <button class="action-btn">Ekle</button>
-                </div>
-                <div class="user-row">
-                    <span>Ahmet Özer</span>
-                    <button class="action-btn">Ekle</button>
-                </div>
-            </div>
+        <div class="user-list">
+            <h3 style="margin-top:0;">Aktif Üyeler</h3>
+            <div class="user-item">● Mehmet Bey</div>
+            <div class="user-item">● Sait Bey Özel Kalem</div>
+            <div id="newUsers"></div>
         </div>
     </div>
 
     <script>
-        function kayitOl() {
-            let isim = prompt("Lütfen Adınızı ve Soyadınızı Giriniz:");
-            if(isim) {
-                document.getElementById('myName').innerText = isim;
-                document.getElementById('myAvatar').innerText = isim[0].toUpperCase();
-                
-                // Sağ listeye kendini ekle
-                let list = document.getElementById('onlineList');
-                let row = document.createElement('div');
-                row.className = 'user-row';
-                row.innerHTML = `<span>${isim} (Siz)</span><span class="status-online">●</span>`;
-                list.prepend(row);
-            }
-        }
-
-        function mesajGonder() {
+        function send() {
+            let user = document.getElementById('userInput').value || "Misafir";
             let msg = document.getElementById('msgInput').value;
-            let isim = document.getElementById('myName').innerText;
-            if(msg && isim !== "Misafir Üye") {
-                let chatBox = document.getElementById('chatBox');
-                let div = document.createElement('div');
-                div.className = 'msg-bubble';
-                div.innerHTML = `<strong>${isim}:</strong> ${msg}`;
-                chatBox.appendChild(div);
+            if(msg) {
+                let chat = document.getElementById('chat');
+                chat.innerHTML += `<div class="bubble"><strong>${user}:</strong> ${msg}</div>`;
                 document.getElementById('msgInput').value = "";
-                chatBox.scrollTop = chatBox.scrollHeight;
-            } else if(isim === "Misafir Üye") {
-                alert("Mesaj yazmak için önce 'İsim Güncelle' butonundan kayıt olmalısınız.");
+                chat.scrollTop = chat.scrollHeight;
             }
         }
     </script>

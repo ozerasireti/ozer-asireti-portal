@@ -2,53 +2,34 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
+    <title>Özer Aşireti | Meydan</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Özer Aşireti | Güvenli Dijital Meydan</title>
     <style>
-        :root { --ana: #0a192f; --asiret-k: #b30000; --asiret-y: #1b5e20; --altin: #ffd700; }
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f0f2f5; }
-        
-        /* ÜST ŞERİTLER */
-        .stripes { position: fixed; top: 0; width: 100%; z-index: 1000; }
-        .s-r { background: var(--asiret-k); height: 8px; }
-        .s-w { background: #fff; height: 6px; }
-        .s-g { background: var(--asiret-y); height: 6px; }
-
-        .header { background: var(--ana); color: white; padding: 45px 20px 15px; text-align: center; border-bottom: 3px solid var(--altin); }
-        .container { max-width: 900px; margin: 20px auto; padding: 20px; display: none; } /* Onay gelene kadar gizli tutar */
-        
-        /* MESAJ ALANI */
-        .chat-container { background: white; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; height: 600px; }
-        .messages-area { flex: 1; padding: 20px; overflow-y: auto; background: #f9f9f9; display: flex; flex-direction: column; gap: 10px; }
-        
-        .bubble { background: white; padding: 12px 18px; border-radius: 18px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); max-width: 80%; border-left: 5px solid var(--asiret-y); }
-        .bubble strong { display: block; color: var(--ana); font-size: 13px; margin-bottom: 5px; }
-
-        /* GİRİŞ ALANI */
-        .input-bar { padding: 20px; background: white; border-top: 1px solid #eee; display: flex; gap: 10px; }
-        input { padding: 12px; border: 1px solid #ddd; border-radius: 25px; outline: none; flex: 1; }
-        .btn-send { background: var(--asiret-k); color: white; border: none; padding: 10px 25px; border-radius: 25px; cursor: pointer; font-weight: bold; }
-        .logout-btn { background: none; border: 1px solid var(--altin); color: var(--altin); padding: 5px 10px; border-radius: 15px; cursor: pointer; font-size: 12px; margin-top: 10px; }
+        body { margin: 0; font-family: sans-serif; background: #e5e7eb; }
+        .header { background: #0a192f; color: white; padding: 40px 20px 10px; text-align: center; border-bottom: 3px solid #ffd700; }
+        .container { max-width: 800px; margin: 20px auto; padding: 15px; display: none; }
+        .chat { background: white; height: 500px; border-radius: 15px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .msgs { flex: 1; padding: 20px; overflow-y: auto; background: #f9f9f9; }
+        .msg { background: #fff; padding: 10px; border-radius: 10px; margin-bottom: 10px; border-left: 5px solid #1b5e20; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .input-bar { padding: 15px; display: flex; gap: 10px; background: white; border-top: 1px solid #eee; }
+        input { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 25px; }
+        .btn { background: #b30000; color: white; border: none; padding: 10px 20px; border-radius: 25px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="stripes"><div class="s-r"></div><div class="s-w"></div><div class="s-g"></div></div>
-
 <div class="header">
-    <h2 id="baslik">DİJİTAL MEYDAN</h2>
-    <div id="userInfo" style="font-size: 12px; color: #ccc;">Kontrol ediliyor...</div>
-    <button class="logout-btn" onclick="cikisYap()">Güvenli Çıkış</button>
+    <h2 style="margin:0;">AŞİRET MEYDANI</h2>
+    <p id="userMail" style="font-size:11px; color:#ffd700;"></p>
+    <button onclick="cikis()" style="background:none; border:1px solid #ffd700; color:#ffd700; border-radius:10px; cursor:pointer; font-size:10px; padding:3px 8px;">Çıkış Yap</button>
 </div>
 
-<div class="container" id="meydanAnaAlan">
-    <div class="chat-container">
-        <div class="messages-area" id="chat">
-            <div class="bubble"><strong>Sistem</strong> Özer Aşireti Meydanı'na hoş geldiniz. Burada konuşulanlar burada kalır.</div>
-        </div>
+<div class="container" id="meydan">
+    <div class="chat">
+        <div class="msgs" id="alan"></div>
         <div class="input-bar">
-            <input type="text" id="uMsg" placeholder="Mesajınızı yazın...">
-            <button class="btn-send" onclick="gonder()">GÖNDER</button>
+            <input type="text" id="mesajim" placeholder="Mesajınızı buraya yazın...">
+            <button class="btn" onclick="gonder()">GÖNDER</button>
         </div>
     </div>
 </div>
@@ -57,8 +38,7 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
 <script>
-    // SİZİN ÖZEL FİREBASE ANAHTARLARINIZ
-    const firebaseConfig = {
+    const config = {
         apiKey: "AIzaSyBJJEJO1FJCvPMF7n5LXX4DYrf3jBEvTlI",
         authDomain: "ozer-asireti-portal.firebaseapp.com",
         projectId: "ozer-asireti-portal",
@@ -66,46 +46,31 @@
         messagingSenderId: "76823168812",
         appId: "1:76823168812:web:e21ab7461ac3eec81b4e89"
     };
-    firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(config);
 
-    // GÜVENLİK KONTROLÜ
     firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-            if (user.emailVerified) {
-                // Her şey yolunda, meydanı göster
-                document.getElementById('meydanAnaAlan').style.display = 'block';
-                document.getElementById('userInfo').innerText = "Onaylı Üye: " + user.email;
-            } else {
-                // Giriş yapmış ama maili onaylamamış
-                alert("Lütfen e-postanıza gönderilen onay linkine tıklayın!");
-                window.location.href = "kayit.html";
-            }
+        if (user && user.emailVerified) {
+            document.getElementById('meydan').style.display = 'block';
+            document.getElementById('userMail').innerText = user.email;
         } else {
-            // Hiç giriş yapmamış
             window.location.href = "kayit.html";
         }
     });
 
     function gonder() {
-        const msg = document.getElementById('uMsg').value;
-        const user = firebase.auth().currentUser;
-        
-        if(msg && user) {
-            const chat = document.getElementById('chat');
-            const div = document.createElement('div');
-            div.className = 'bubble';
-            // E-postanın baş kısmını kullanıcı adı gibi gösterir
-            const userName = user.email.split('@')[0]; 
-            div.innerHTML = `<strong>${userName}</strong> ${msg}`;
-            chat.appendChild(div);
-            chat.scrollTop = chat.scrollHeight;
-            document.getElementById('uMsg').value = "";
+        const m = document.getElementById('mesajim').value;
+        const mail = firebase.auth().currentUser.email.split('@')[0];
+        if(m) {
+            const alan = document.getElementById('alan');
+            alan.innerHTML += `<div class="msg"><b>${mail}:</b><br>${m}</div>`;
+            alan.scrollTop = alan.scrollHeight;
+            document.getElementById('mesajim').value = "";
         }
     }
 
-    function cikisYap() {
-        firebase.auth().signOut().then(() => {
-            window.location.href = "index.html";
-        });
+    function cikis() {
+        firebase.auth().signOut().then(() => { window.location.href = "index.html"; });
     }
-</script
+</script>
+</body>
+</html>

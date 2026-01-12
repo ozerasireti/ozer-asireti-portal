@@ -1,0 +1,28 @@
+includes("selam")) {
+                botKonus(bots[Math.floor(Math.random()*bots.length)], "Aleykümselam ağam.", 1200);
+            }
+        }
+
+        function botKonus(bot, m, s) {
+            setTimeout(() => {
+                db.collection("sohbet").add({ isim: bot, mesaj: m, tarih: firebase.firestore.FieldValue.serverTimestamp() });
+            }, s);
+        }
+
+        function panelAc(isim) {
+            if(liderMi) {
+                seciliUser = isim; document.getElementById('targetName').innerText = isim;
+                document.getElementById('adminPanel').style.display = "block";
+            }
+        }
+
+        function gorevAta() {
+            const r = document.getElementById('gorevSecimi').value;
+            db.collection("rutbeler").doc(seciliUser).set({ rutbe: r }).then(() => {
+                alert(seciliUser + " rütbesi '" + r + "' olarak mühürlendi!"); 
+                document.getElementById('adminPanel').style.display = 'none';
+            });
+        }
+    </script>
+</body>
+</html>

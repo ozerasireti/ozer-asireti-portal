@@ -2,21 +2,24 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Özer Aşireti | Canlı Meydan</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Özer Aşireti | Canlı Meydan</title>
     <style>
         body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f0f2f5; display:none; }
-        .header { background: #0a192f; color: white; padding: 30px 20px; text-align: center; border-bottom: 3px solid #ffd700; }
-        
-        /* SAYAÇ PANELİ */
-        .stats-panel { display: flex; justify-content: center; gap: 20px; margin-top: 15px; }
-        .stat-box { background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 10px; border: 1px solid #ffd700; }
-        .stat-num { display: block; font-size: 20px; font-weight: bold; color: #ffd700; }
-        .stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; }
+        .header { background: #0a192f; color: white; padding: 25px 20px; text-align: center; border-bottom: 3px solid #ffd700; position: sticky; top: 0; z-index: 100; }
+        .stats-panel { display: flex; justify-content: center; gap: 15px; margin-top: 10px; }
+        .stat-box { background: rgba(255,255,255,0.1); padding: 5px 15px; border-radius: 8px; border: 1px solid #ffd700; min-width: 80px; }
+        .stat-num { display: block; font-size: 18px; font-weight: bold; color: #ffd700; }
+        .stat-label { font-size: 9px; text-transform: uppercase; }
 
-        .chat-box { max-width: 700px; margin: 20px auto; background: white; height: 500px; border-radius: 15px; display: flex; flex-direction: column; box-shadow: 0 5px 15px rgba(0,0,0,0.1); overflow: hidden; }
-        .msgs { flex: 1; padding: 20px; overflow-y: auto; background: #f9f9f9; }
-        .msg { background: white; padding: 10px 15px; border-radius: 10px; margin-bottom: 10px; border-left: 5px solid #1b5e20; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .chat-box { max-width: 700px; margin: 10px auto; background: white; height: calc(100vh - 200px); border-radius: 15px; display: flex; flex-direction: column; box-shadow: 0 5px 15px rgba(0,0,0,0.1); overflow: hidden; }
+        .msgs { flex: 1; padding: 15px; overflow-y: auto; background: #f9f9f9; display: flex; flex-direction: column; gap: 10px; }
+        
+        .msg { background: white; padding: 10px 15px; border-radius: 12px; border-left: 5px solid #1b5e20; box-shadow: 0 2px 4px rgba(0,0,0,0.05); position: relative; max-width: 85%; }
+        .msg b { color: #0a192f; font-size: 13px; }
+        .msg p { margin: 5px 0 15px 0; font-size: 15px; color: #333; }
+        .msg-time { position: absolute; bottom: 5px; right: 10px; font-size: 10px; color: #888; }
+
         .bar { padding: 15px; display: flex; gap: 10px; background: white; border-top: 1px solid #eee; }
         input { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 25px; outline: none; }
         .btn-send { background: #b30000; color: white; border: none; padding: 10px 25px; border-radius: 25px; cursor: pointer; font-weight: bold; }
@@ -25,20 +28,11 @@
 <body>
 
     <div class="header">
-        <h2 style="margin:0;">AŞİRET MEYDANI</h2>
-        
+        <h2 style="margin:0; font-size: 20px;">AŞİRET MEYDANI</h2>
         <div class="stats-panel">
-            <div class="stat-box">
-                <span class="stat-num" id="toplamUye">--</span>
-                <span class="stat-label">Genel Katılım</span>
-            </div>
-            <div class="stat-box">
-                <span class="stat-num" id="aktifUye">--</span>
-                <span class="stat-label">Şu An Aktif</span>
-            </div>
+            <div class="stat-box"><span class="stat-num">142</span><span class="stat-label">Kayıtlı</span></div>
+            <div class="stat-box"><span class="stat-num">7</span><span class="stat-label">Aktif</span></div>
         </div>
-
-        <button onclick="firebase.auth().signOut().then(()=>{location.href='index.html'})" style="margin-top:15px; background:none; color:#ffd700; border:1px solid #ffd700; border-radius:10px; padding:5px 10px; cursor:pointer;">Güvenli Çıkış</button>
     </div>
 
     <div class="chat-box">
@@ -63,32 +57,52 @@
         };
         firebase.initializeApp(config);
 
-        // Nöbetçi Kontrolü
         firebase.auth().onAuthStateChanged(u => {
             if(u && u.emailVerified) { 
                 document.body.style.display='block';
-                sayaclariGuncelle();
+                mesajlariYukle();
             } else { 
                 window.location.href="kayit.html"; 
             }
         });
 
-        function sayaclariGuncelle() {
-            // Şimdilik simülasyon olarak yapıyoruz, Firebase veritabanı bağlandığında gerçek rakamlar gelecek
-            // Sait Bey'e göstermek için başlangıç değerleri:
-            document.getElementById('toplamUye').innerText = Math.floor(Math.random() * 50) + 120; // Temsili 120+ üye
-            document.getElementById('aktifUye').innerText = Math.floor(Math.random() * 10) + 5;    // Temsili 5+ aktif
-        }
-
         function gonder() {
             const t = document.getElementById('mInput').value;
             const user = firebase.auth().currentUser.email.split('@')[0];
             if(t) {
-                const alan = document.getElementById('alan');
-                alan.innerHTML += `<div class="msg"><b>${user}:</b><br>${t}</div>`;
+                const simdi = new Date();
+                const zamanEtiketi = simdi.toLocaleDateString('tr-TR', {day:'numeric', month:'short'}) + ", " + simdi.toLocaleTimeString('tr-TR', {hour:'2-digit', minute:'2-digit'});
+                
+                const yeniMesaj = { isim: user, metin: t, zaman: zamanEtiketi };
+                
+                // Ekrana ekle
+                mesajCiz(yeniMesaj);
+                
+                // Hafızaya Kaydet
+                let eskiMesajlar = JSON.parse(localStorage.getItem('asiret_sohbet')) || [];
+                eskiMesajlar.push(yeniMesaj);
+                localStorage.setItem('asiret_sohbet', JSON.stringify(eskiMesajlar));
+                
                 document.getElementById('mInput').value = "";
-                alan.scrollTop = alan.scrollHeight;
             }
+        }
+
+        function mesajCiz(data) {
+            const alan = document.getElementById('alan');
+            alan.innerHTML += `
+                <div class="msg">
+                    <b>${data.isim}</b>
+                    <p>${data.metin}</p>
+                    <span class="msg-time">${data.zaman}</span>
+                </div>`;
+            alan.scrollTop = alan.scrollHeight;
+        }
+
+        function mesajlariYukle() {
+            const alan = document.getElementById('alan');
+            alan.innerHTML = ""; // Temizle
+            let mesajlar = JSON.parse(localStorage.getItem('asiret_sohbet')) || [];
+            mesajlar.forEach(m => mesajCiz(m));
         }
     </script>
 </body>

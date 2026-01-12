@@ -3,107 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Özer Aşireti | Canlı Meydan</title>
+    <title>Özer Aşireti | Yetkili Meydan</title>
     <style>
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f0f2f5; display:none; }
-        .header { background: #0a192f; color: white; padding: 25px 20px; text-align: center; border-bottom: 3px solid #ffd700; position: sticky; top: 0; z-index: 100; }
-        .stats-panel { display: flex; justify-content: center; gap: 15px; margin-top: 10px; }
-        .stat-box { background: rgba(255,255,255,0.1); padding: 5px 15px; border-radius: 8px; border: 1px solid #ffd700; min-width: 80px; }
-        .stat-num { display: block; font-size: 18px; font-weight: bold; color: #ffd700; }
-        .stat-label { font-size: 9px; text-transform: uppercase; }
-
-        .chat-box { max-width: 700px; margin: 10px auto; background: white; height: calc(100vh - 200px); border-radius: 15px; display: flex; flex-direction: column; box-shadow: 0 5px 15px rgba(0,0,0,0.1); overflow: hidden; }
-        .msgs { flex: 1; padding: 15px; overflow-y: auto; background: #f9f9f9; display: flex; flex-direction: column; gap: 10px; }
+        body { margin: 0; font-family: sans-serif; background: #f0f2f5; }
+        .header { background: #0a192f; color: white; padding: 20px; text-align: center; border-bottom: 4px solid #ffd700; position: sticky; top:0; z-index:100; }
+        .chat { max-width: 700px; margin: 20px auto; background: white; height: 550px; display: flex; flex-direction: column; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .msgs { flex: 1; padding: 15px; overflow-y: auto; background: #f9f9f9; }
         
-        .msg { background: white; padding: 10px 15px; border-radius: 12px; border-left: 5px solid #1b5e20; box-shadow: 0 2px 4px rgba(0,0,0,0.05); position: relative; max-width: 85%; }
-        .msg b { color: #0a192f; font-size: 13px; }
-        .msg p { margin: 5px 0 15px 0; font-size: 15px; color: #333; }
-        .msg-time { position: absolute; bottom: 5px; right: 10px; font-size: 10px; color: #888; }
-
-        .bar { padding: 15px; display: flex; gap: 10px; background: white; border-top: 1px solid #eee; }
-        input { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 25px; outline: none; }
-        .btn-send { background: #b30000; color: white; border: none; padding: 10px 25px; border-radius: 25px; cursor: pointer; font-weight: bold; }
+        /* RÜTBELİ MESAJ KARTLARI */
+        .msg-box { background: white; padding: 12px; margin-bottom: 12px; border-radius: 10px; border-left: 6px solid #ccc; position: relative; cursor: pointer; }
+        .msg-box.LİDER { border-left-color: #ffd700; background: #fffdf0; }
+        .msg-box.MUHAFIZ { border-left-color: #b30000; }
+        .msg-box.VEKİL { border-left-color: #1e40af; }
+        
+        .unvan { font-size: 10px; padding: 3px 8px; border-radius: 5px; color: white; margin-left: 10px; font-weight: bold; }
+        .unvan-LİDER { background: gold; color: black; }
+        .unvan-MUHAFIZ { background: #b30000; }
+        .unvan-VEKİL { background: #1e40af; }
+        .unvan-ÜYE { background: #1b5e20; }
+        
+        .bar { display: flex; padding: 15px; background: white; border-top: 1px solid #ddd; }
+        input { flex: 1; padding: 12px; border-radius: 20px; border: 1px solid #ccc; outline: none; }
+        button { background: #b30000; color: white; border: none; padding: 10px 25px; border-radius: 20px; cursor: pointer; font-weight: bold; }
+        
+        /* RÜTBE PANELİ (SADECE LİDERE GÖRÜNÜR) */
+        #adminPanel { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #0a192f; padding: 15px; border-radius: 10px; display: none; z-index: 200; border: 2px solid #ffd700; color: white; text-align: center; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h2 style="margin:0; font-size: 20px;">AŞİRET MEYDANI</h2>
-        <div class="stats-panel">
-            <div class="stat-box"><span class="stat-num">142</span><span class="stat-label">Kayıtlı</span></div>
-            <div class="stat-box"><span class="stat-num">7</span><span class="stat-label">Aktif</span></div>
-        </div>
+<div class="header">
+    <h2 style="margin:0;">AŞİRET MEYDANI</h2>
+    <small id="kisiBilgi"></small>
+</div>
+
+<div id="adminPanel">
+    <p id="seciliKisi" style="margin:0 0 10px 0; font-weight:bold;"></p>
+    <button onclick="rutbeVer('VEKİL')" style="background:#1e40af; margin-right:5px;">VEKİL YAP</button>
+    <button onclick="rutbeVer('MUHAFIZ')" style="background:#b30000; margin-right:5px;">MUHAFIZ YAP</button>
+    <button onclick="rutbeVer('ÜYE')" style="background:#1b5e20;">ÜYE YAP</button>
+    <br><button onclick="panelKapat()" style="background:gray; margin-top:10px; font-size:10px;">Kapat</button>
+</div>
+
+<div class="chat">
+    <div class="msgs" id="alan"></div>
+    <div class="bar">
+        <input type="text" id="mText" placeholder="Mesajınızı mühürleyin...">
+        <button onclick="gonder()">GÖNDER</button>
     </div>
+</div>
 
-    <div class="chat-box">
-        <div class="msgs" id="alan"></div>
-        <div class="bar">
-            <input type="text" id="mInput" placeholder="Mesajınızı buraya yazın...">
-            <button class="btn-send" onclick="gonder()">GÖNDER</button>
-        </div>
-    </div>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script>
+    const config = {
+        apiKey: "AIzaSyBJJEJO1FJCvPMF7n5LXX4DYrf3jBEvTlI",
+        authDomain: "ozer-asireti-portal.firebaseapp.com",
+        projectId: "ozer-asireti-portal",
+        storageBucket: "ozer-asireti-portal.firebasestorage.app",
+        messagingSenderId: "76823168812",
+        appId: "1:76823168812:web:e21ab7461ac3eec81b4e89"
+    };
+    firebase.initializeApp(config);
+    const db = firebase.firestore();
 
-    <script>
-        const config = {
-            apiKey: "AIzaSyBJJEJO1FJCvPMF7n5LXX4DYrf3jBEvTlI",
-            authDomain: "ozer-asireti-portal.firebaseapp.com",
-            projectId: "ozer-asireti-portal",
-            storageBucket: "ozer-asireti-portal.firebasestorage.app",
-            messagingSenderId: "76823168812",
-            appId: "1:76823168812:web:e21ab7461ac3eec81b4e89"
-        };
-        firebase.initializeApp(config);
+    const adim = localStorage.getItem('asiret_ad') || "Ziyaretçi";
+    let unvanim = "ÜYE";
+    if(adim === "Sait Özer" || adim === "Sait Ozer") unvanim = "LİDER";
 
-        firebase.auth().onAuthStateChanged(u => {
-            if(u && u.emailVerified) { 
-                document.body.style.display='block';
-                mesajlariYukle();
-            } else { 
-                window.location.href="kayit.html"; 
-            }
-        });
+    document.getElementById('kisiBilgi').innerText = adim + " - " + unvanim;
 
-        function gonder() {
-            const t = document.getElementById('mInput').value;
-            const user = firebase.auth().currentUser.email.split('@')[0];
-            if(t) {
-                const simdi = new Date();
-                const zamanEtiketi = simdi.toLocaleDateString('tr-TR', {day:'numeric', month:'short'}) + ", " + simdi.toLocaleTimeString('tr-TR', {hour:'2-digit', minute:'2-digit'});
-                
-                const yeniMesaj = { isim: user, metin: t, zaman: zamanEtiketi };
-                
-                // Ekrana ekle
-                mesajCiz(yeniMesaj);
-                
-                // Hafızaya Kaydet
-                let eskiMesajlar = JSON.parse(localStorage.getItem('asiret_sohbet')) || [];
-                eskiMesajlar.push(yeniMesaj);
-                localStorage.setItem('asiret_sohbet', JSON.stringify(eskiMesajlar));
-                
-                document.getElementById('mInput').value = "";
-            }
-        }
+    let seciliUyeAd = "";
 
-        function mesajCiz(data) {
-            const alan = document.getElementById('alan');
+    // MESAJLARI VE RÜTBELERİ DİNLE
+    db.collection("sohbet").orderBy("tarih", "asc").onSnapshot((snaps) => {
+        const alan = document.getElementById('alan');
+        alan.innerHTML = "";
+        snaps.forEach((doc) => {
+            const d = doc.data();
+            // Rütbeleri gerçek zamanlı veritabanından çekmek için (opsiyonel geliştirme)
             alan.innerHTML += `
-                <div class="msg">
-                    <b>${data.isim}</b>
-                    <p>${data.metin}</p>
-                    <span class="msg-time">${data.zaman}</span>
+                <div class="msg-box ${d.unvan}" onclick="adminPanelAc('${d.isim}')">
+                    <b>${d.isim}</b> <span class="unvan unvan-${d.unvan}">${d.unvan}</span>
+                    <p style="margin:5px 0 0 0;">${d.mesaj}</p>
                 </div>`;
-            alan.scrollTop = alan.scrollHeight;
-        }
+        });
+        alan.scrollTop = alan.scrollHeight;
+    });
 
-        function mesajlariYukle() {
-            const alan = document.getElementById('alan');
-            alan.innerHTML = ""; // Temizle
-            let mesajlar = JSON.parse(localStorage.getItem('asiret_sohbet')) || [];
-            mesajlar.forEach(m => mesajCiz(m));
+    function gonder() {
+        const metin = document.getElementById('mText').value;
+        if(metin) {
+            // Önce güncel rütbesini kontrol et
+            db.collection("rutbeler").doc(adim).get().then(doc => {
+                let guncelUnvan = unvanim;
+                if(doc.exists) guncelUnvan = doc.data().rutbe;
+
+                db.collection("sohbet").add({
+                    isim: adim,
+                    unvan: guncelUnvan,
+                    mesaj: metin,
+                    tarih: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            });
+            document.getElementById('mText').value = "";
         }
-    </script>
+    }
+
+    // SAİT BEY İÇİN ADMİN PANELİ
+    function adminPanelAc(uAd) {
+        if(unvanim === "LİDER") {
+            seciliUyeAd = uAd;
+            document.getElementById('seciliKisi').innerText = uAd + " için rütbe seç:";
+            document.getElementById('adminPanel').style.display = "block";
+        }
+    }
+
+    function panelKapat() { document.getElementById('adminPanel').style.display = "none"; }
+
+    function rutbeVer(yeniRutbe) {
+        db.collection("rutbeler").doc(seciliUyeAd).set({
+            rutbe: yeniRutbe
+        }).then(() => {
+            alert(seciliUyeAd + " artık " + yeniRutbe + "!");
+            panelKapat();
+        });
+    }
+</script>
 </body>
 </html>

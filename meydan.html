@@ -5,34 +5,30 @@
     <title>Özer Aşireti | Meydan</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body { margin: 0; font-family: sans-serif; background: #e5e7eb; }
-        .header { background: #0a192f; color: white; padding: 40px 20px 10px; text-align: center; border-bottom: 3px solid #ffd700; }
-        .container { max-width: 800px; margin: 20px auto; padding: 15px; display: none; }
-        .chat { background: white; height: 500px; border-radius: 15px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .msgs { flex: 1; padding: 20px; overflow-y: auto; background: #f9f9f9; }
-        .msg { background: #fff; padding: 10px; border-radius: 10px; margin-bottom: 10px; border-left: 5px solid #1b5e20; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .input-bar { padding: 15px; display: flex; gap: 10px; background: white; border-top: 1px solid #eee; }
+        body { margin: 0; font-family: sans-serif; background: #f0f2f5; display:none; }
+        .header { background: #0a192f; color: white; padding: 20px; text-align: center; border-bottom: 3px solid #ffd700; }
+        .chat-box { max-width: 800px; margin: 20px auto; background: white; border-radius: 15px; height: 500px; display: flex; flex-direction: column; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .msgs { flex: 1; padding: 20px; overflow-y: auto; }
+        .msg { background: #f1f1f1; padding: 10px; border-radius: 10px; margin-bottom: 10px; border-left: 5px solid #1b5e20; }
+        .input-bar { padding: 15px; border-top: 1px solid #eee; display: flex; gap: 10px; }
         input { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 25px; }
-        .btn { background: #b30000; color: white; border: none; padding: 10px 20px; border-radius: 25px; cursor: pointer; font-weight: bold; }
+        button { background: #b30000; color: white; border: none; padding: 10px 20px; border-radius: 25px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <h2 style="margin:0;">AŞİRET MEYDANI</h2>
-    <p id="userMail" style="font-size:11px; color:#ffd700;"></p>
-    <button onclick="cikis()" style="background:none; border:1px solid #ffd700; color:#ffd700; border-radius:10px; cursor:pointer; font-size:10px; padding:3px 8px;">Çıkış Yap</button>
-</div>
+    <div class="header">
+        <h2>AŞİRET MEYDANI</h2>
+        <button onclick="firebase.auth().signOut().then(()=>{location.href='index.html'})" style="background:none; color:#ffd700; border:1px solid #ffd700; border-radius:10px; cursor:pointer; padding:5px;">Güvenli Çıkış</button>
+    </div>
 
-<div class="container" id="meydan">
-    <div class="chat">
+    <div class="chat-box">
         <div class="msgs" id="alan"></div>
         <div class="input-bar">
-            <input type="text" id="mesajim" placeholder="Mesajınızı buraya yazın...">
-            <button class="btn" onclick="gonder()">GÖNDER</button>
+            <input type="text" id="m" placeholder="Mesajınızı yazın...">
+            <button onclick="gonder()">GÖNDER</button>
         </div>
     </div>
-</div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
@@ -50,26 +46,19 @@
 
     firebase.auth().onAuthStateChanged((user) => {
         if (user && user.emailVerified) {
-            document.getElementById('meydan').style.display = 'block';
-            document.getElementById('userMail').innerText = user.email;
+            document.body.style.display = 'block'; // Sadece onaylıysa sayfayı göster
         } else {
             window.location.href = "kayit.html";
         }
     });
 
     function gonder() {
-        const m = document.getElementById('mesajim').value;
+        const txt = document.getElementById('m').value;
         const mail = firebase.auth().currentUser.email.split('@')[0];
-        if(m) {
-            const alan = document.getElementById('alan');
-            alan.innerHTML += `<div class="msg"><b>${mail}:</b><br>${m}</div>`;
-            alan.scrollTop = alan.scrollHeight;
-            document.getElementById('mesajim').value = "";
+        if(txt) {
+            document.getElementById('alan').innerHTML += `<div class="msg"><b>${mail}:</b><br>${txt}</div>`;
+            document.getElementById('m').value = "";
         }
-    }
-
-    function cikis() {
-        firebase.auth().signOut().then(() => { window.location.href = "index.html"; });
     }
 </script>
 </body>

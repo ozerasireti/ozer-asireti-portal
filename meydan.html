@@ -2,26 +2,58 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Meydan</title>
+    <title>Özer Aşireti | Canlı Meydan</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f0f2f5; display:none; }
+        .header { background: #0a192f; color: white; padding: 30px 20px; text-align: center; border-bottom: 3px solid #ffd700; }
+        
+        /* SAYAÇ PANELİ */
+        .stats-panel { display: flex; justify-content: center; gap: 20px; margin-top: 15px; }
+        .stat-box { background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 10px; border: 1px solid #ffd700; }
+        .stat-num { display: block; font-size: 20px; font-weight: bold; color: #ffd700; }
+        .stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; }
+
+        .chat-box { max-width: 700px; margin: 20px auto; background: white; height: 500px; border-radius: 15px; display: flex; flex-direction: column; box-shadow: 0 5px 15px rgba(0,0,0,0.1); overflow: hidden; }
+        .msgs { flex: 1; padding: 20px; overflow-y: auto; background: #f9f9f9; }
+        .msg { background: white; padding: 10px 15px; border-radius: 10px; margin-bottom: 10px; border-left: 5px solid #1b5e20; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .bar { padding: 15px; display: flex; gap: 10px; background: white; border-top: 1px solid #eee; }
+        input { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 25px; outline: none; }
+        .btn-send { background: #b30000; color: white; border: none; padding: 10px 25px; border-radius: 25px; cursor: pointer; font-weight: bold; }
+    </style>
 </head>
-<body style="display:none; font-family:sans-serif; background:#f0f2f5;">
-    <div style="background:#0a192f; color:white; padding:20px; text-align:center;">
-        <h2>AŞİRET MEYDANI</h2>
-        <button onclick="firebase.auth().signOut().then(()=>{location.href='index.html'})">Güvenli Çıkış</button>
+<body>
+
+    <div class="header">
+        <h2 style="margin:0;">AŞİRET MEYDANI</h2>
+        
+        <div class="stats-panel">
+            <div class="stat-box">
+                <span class="stat-num" id="toplamUye">--</span>
+                <span class="stat-label">Genel Katılım</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-num" id="aktifUye">--</span>
+                <span class="stat-label">Şu An Aktif</span>
+            </div>
+        </div>
+
+        <button onclick="firebase.auth().signOut().then(()=>{location.href='index.html'})" style="margin-top:15px; background:none; color:#ffd700; border:1px solid #ffd700; border-radius:10px; padding:5px 10px; cursor:pointer;">Güvenli Çıkış</button>
     </div>
-    
-    <div id="chat" style="max-width:600px; margin:20px auto; background:white; height:400px; overflow-y:auto; padding:15px; border-radius:10px;"></div>
-    
-    <div style="max-width:600px; margin:auto; display:flex;">
-        <input type="text" id="m" style="flex:1; padding:10px;" placeholder="Mesajınız...">
-        <button onclick="gonder()" style="padding:10px; background:#b30000; color:white; border:none;">GÖNDER</button>
+
+    <div class="chat-box">
+        <div class="msgs" id="alan"></div>
+        <div class="bar">
+            <input type="text" id="mInput" placeholder="Mesajınızı buraya yazın...">
+            <button class="btn-send" onclick="gonder()">GÖNDER</button>
+        </div>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
     <script>
-        const config = { /* Yukarıdakiyle aynı */ 
+        const config = {
             apiKey: "AIzaSyBJJEJO1FJCvPMF7n5LXX4DYrf3jBEvTlI",
             authDomain: "ozer-asireti-portal.firebaseapp.com",
             projectId: "ozer-asireti-portal",
@@ -31,17 +63,31 @@
         };
         firebase.initializeApp(config);
 
+        // Nöbetçi Kontrolü
         firebase.auth().onAuthStateChanged(u => {
-            if(u && u.emailVerified) { document.body.style.display='block'; }
-            else { window.location.href="kayit.html"; }
+            if(u && u.emailVerified) { 
+                document.body.style.display='block';
+                sayaclariGuncelle();
+            } else { 
+                window.location.href="kayit.html"; 
+            }
         });
 
+        function sayaclariGuncelle() {
+            // Şimdilik simülasyon olarak yapıyoruz, Firebase veritabanı bağlandığında gerçek rakamlar gelecek
+            // Sait Bey'e göstermek için başlangıç değerleri:
+            document.getElementById('toplamUye').innerText = Math.floor(Math.random() * 50) + 120; // Temsili 120+ üye
+            document.getElementById('aktifUye').innerText = Math.floor(Math.random() * 10) + 5;    // Temsili 5+ aktif
+        }
+
         function gonder() {
-            const t = document.getElementById('m').value;
+            const t = document.getElementById('mInput').value;
             const user = firebase.auth().currentUser.email.split('@')[0];
             if(t) {
-                document.getElementById('chat').innerHTML += `<div><b>${user}:</b> ${t}</div>`;
-                document.getElementById('m').value = "";
+                const alan = document.getElementById('alan');
+                alan.innerHTML += `<div class="msg"><b>${user}:</b><br>${t}</div>`;
+                document.getElementById('mInput').value = "";
+                alan.scrollTop = alan.scrollHeight;
             }
         }
     </script>

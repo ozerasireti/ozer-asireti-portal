@@ -3,75 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Özer Aşireti | Dijital Meydan</title>
+    <title>Özer Aşireti | Güvenli Meydan</title>
     <style>
         body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #e5e7eb; }
         .stripes { position: fixed; top: 0; width: 100%; z-index: 1000; }
         .s-r { background: #b30000; height: 8px; }
         .s-w { background: #fff; height: 6px; }
         .s-g { background: #1b5e20; height: 6px; }
-
         .header { background: #0a192f; color: white; padding: 45px 20px 15px; text-align: center; border-bottom: 3px solid #ffd700; }
-        .container { max-width: 800px; margin: 20px auto; padding: 20px; }
-        
+        .container { max-width: 800px; margin: 20px auto; padding: 20px; display:none; } /* Onay gelene kadar gizli */
         .chat-box { background: white; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); height: 500px; display: flex; flex-direction: column; }
-        .messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: #f9fafb; }
-        
-        .msg { background: white; padding: 12px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border-left: 4px solid #1b5e20; max-width: 85%; }
-        .msg b { color: #0a192f; display: block; font-size: 13px; }
-        .msg small { color: #999; font-size: 10px; float: right; }
-
-        .input-area { padding: 15px; background: white; border-top: 1px solid #eee; display: flex; gap: 10px; border-radius: 0 0 15px 15px; }
-        input { padding: 10px; border: 1px solid #ddd; border-radius: 20px; outline: none; flex: 1; }
-        .btn { background: #b30000; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; }
+        .messages { flex: 1; padding: 20px; overflow-y: auto; background: #f9fafb; }
+        .msg { background: white; padding: 12px; border-radius: 10px; margin-bottom:10px; border-left: 4px solid #1b5e20; }
+        .input-area { padding: 15px; background: white; border-top: 1px solid #eee; display: flex; gap: 10px; }
+        input { padding: 10px; border: 1px solid #ddd; border-radius: 20px; flex: 1; }
+        .btn { background: #b30000; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; }
     </style>
 </head>
 <body>
     <div class="stripes"><div class="s-r"></div><div class="s-w"></div><div class="s-g"></div></div>
+    
     <div class="header">
-        <h2 style="margin:0;">AŞİRET DİJİTAL MEYDANI</h2>
-        <a href="index.html" style="color:#ffd700; text-decoration:none; font-size:12px;">← ANA SAYFAYA DÖN</a>
+        <h2 id="welcomeText">AŞİRET MEYDANI</h2>
+        <button onclick="cikisYap()" style="background:none; border:none; color:#ffd700; cursor:pointer;">Oturumu Kapat</button>
     </div>
 
-    <div class="container">
+    <div class="container" id="mainMeydan">
         <div class="chat-box">
             <div class="messages" id="chatArea"></div>
             <div class="input-area">
-                <input type="text" id="userName" placeholder="Adınız" style="max-width: 100px;">
                 <input type="text" id="userMsg" placeholder="Mesajınızı yazın...">
                 <button class="btn" onclick="gonder()">GÖNDER</button>
             </div>
         </div>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
     <script>
-        // Sayfa açıldığında hafızadaki mesajları getir
-        window.onload = function() {
-            const kayıtlı = JSON.parse(localStorage.getItem('asiret_mesajlar')) || [];
-            kayıtlı.forEach(m => ekranaEkle(m.ad, m.msj, m.zaman));
+        // SİZİN ÖZEL ANAHTARLARINIZ
+        const firebaseConfig = {
+            apiKey: "AIzaSyBJJEJO1FJCvPMF7n5LXX4DYrf3jBEvTlI",
+            authDomain: "ozer-asireti-portal.firebaseapp.com",
+            projectId: "ozer-asireti-portal",
+            storageBucket: "ozer-asireti-portal.firebasestorage.app",
+            messagingSenderId: "76823168812",
+            appId: "1:76823168812:web:e21ab7461ac3eec81b4e89"
         };
+        firebase.initializeApp(firebaseConfig);
+
+        // KAPI KONTROLÜ (Giriş yapılmış mı ve e-posta onaylı mı?)
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                if (user.emailVerified) {
+                    // Onaylıysa meydanı göster
+                    document.getElementById('mainMeydan').style.display = 'block';
+                    document.getElementById('welcomeText').innerText = "HOŞ GELDİN: " + user.email;
+                } else {
+                    // Onaylı değilse uyar ve kayıt sayfasına at
+                    alert("Sait Bey'in talimatıdır: Lütfen e-postanıza gelen linke tıklayarak üyeliğinizi onaylayın.");
+                    window.location.href = "kayit.html";
+                }
+            } else {
+                // Giriş hiç yapılmamışsa kayda at
+                window.location.href = "kayit.html";
+            }
+        });
 
         function gonder() {
-            const ad = document.getElementById('userName').value;
             const msj = document.getElementById('userMsg').value;
-            const zaman = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-
-            if(ad && msj) {
-                ekranaEkle(ad, msj, zaman);
-                // Hafızaya kaydet
-                const kayıtlı = JSON.parse(localStorage.getItem('asiret_mesajlar')) || [];
-                kayıtlı.push({ad, msj, zaman});
-                localStorage.setItem('asiret_mesajlar', JSON.stringify(kayıtlı));
+            const email = firebase.auth().currentUser.email;
+            if(msj) {
+                const alan = document.getElementById('chatArea');
+                alan.innerHTML += `<div class="msg"><b>${email}:</b><br>${msj}</div>`;
+                alan.scrollTop = alan.scrollHeight;
                 document.getElementById('userMsg').value = "";
-            } else {
-                alert("Lütfen isim ve mesaj yazın.");
             }
         }
 
-        function ekranaEkle(ad, msj, zaman) {
-            const alan = document.getElementById('chatArea');
-            alan.innerHTML += `<div class="msg"><b>${ad}</b>${msj}<small>${zaman}</small></div>`;
-            alan.scrollTop = alan.scrollHeight;
+        function cikisYap() {
+            firebase.auth().signOut().then(() => {
+                window.location.href = "index.html";
+            });
         }
     </script>
 </body>

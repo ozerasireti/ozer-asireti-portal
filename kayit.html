@@ -5,58 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Özer Aşireti | Giriş</title>
     <style>
-        body { background: #0a192f; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .box { background: white; color: #333; padding: 30px; border-radius: 15px; width: 320px; text-align: center; border-top: 10px solid #b30000; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 25px; box-sizing: border-box; text-align: center; }
-        .btn { width: 100%; padding: 12px; border-radius: 25px; border: none; cursor: pointer; font-weight: bold; background: #1b5e20; color: white; }
-        #status { font-size: 12px; margin-top: 10px; font-weight: bold; }
+        body { background: #0a192f; color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .box { background: white; color: #333; padding: 35px; border-radius: 20px; width: 340px; text-align: center; border-top: 10px solid #b30000; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+        h2 { color: #b30000; margin-bottom: 20px; letter-spacing: 1px; }
+        input { width: 100%; padding: 14px; margin: 12px 0; border: 1.5px solid #ddd; border-radius: 30px; box-sizing: border-box; text-align: center; font-size: 16px; outline: none; }
+        input:focus { border-color: #b30000; }
+        .btn { width: 100%; padding: 14px; border-radius: 30px; border: none; cursor: pointer; font-weight: bold; background: #1b5e20; color: white; font-size: 16px; transition: 0.3s; }
+        .btn:hover { background: #0a192f; }
     </style>
 </head>
 <body>
     <div class="box">
-        <h2 style="color:#b30000">AŞİRET KAYDI</h2>
-        <p style="font-size:12px;">E-postanıza onay kodu (link) gelecektir.</p>
-        <input type="email" id="email" placeholder="E-posta Adresiniz">
-        <input type="password" id="pass" placeholder="Şifreniz">
-        <button class="btn" onclick="kayitOl()">KAYIT OL VE ONAY BEKLE</button>
-        <p onclick="location.reload()" style="font-size:10px; color:blue; cursor:pointer; margin-top:10px;">Sayfayı Yenile / Giriş Yap</p>
-        <div id="status"></div>
+        <h2>ÖZER AŞİRETİ</h2>
+        <p style="font-size:13px; color:#666;">Meydana girmek için adınızı soyadınızı yazın.</p>
+        <input type="text" id="userInp" placeholder="Adınız Soyadınız">
+        <button class="btn" onclick="girisYap()">MEYDANA GİR</button>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-
     <script>
-        const config = {
-            apiKey: "AIzaSyBJJEJO1FJCvPMF7n5LXX4DYrf3jBEvTlI",
-            authDomain: "ozer-asireti-portal.firebaseapp.com",
-            projectId: "ozer-asireti-portal",
-            storageBucket: "ozer-asireti-portal.firebasestorage.app",
-            messagingSenderId: "76823168812",
-            appId: "1:76823168812:web:e21ab7461ac3eec81b4e89"
-        };
-        firebase.initializeApp(config);
-
-        function kayitOl() {
-            const email = document.getElementById('email').value;
-            const pass = document.getElementById('pass').value;
-            const s = document.getElementById('status');
-
-            // Önce giriş yapmayı dener, hesap yoksa kayıt eder
-            firebase.auth().signInWithEmailAndPassword(email, pass)
-            .then((u) => {
-                if(u.user.emailVerified) { window.location.href = "meydan.html"; }
-                else { s.innerText = "Lütfen önce e-postanızdaki linke tıklayın!"; s.style.color="orange"; }
-            })
-            .catch(() => {
-                firebase.auth().createUserWithEmailAndPassword(email, pass)
-                .then((u) => {
-                    u.user.sendEmailVerification();
-                    s.innerText = "Onay maili gönderildi! Lütfen kutunuzu (ve spamı) kontrol edin.";
-                    s.style.color = "green";
-                })
-                .catch(e => { s.innerText = "Hata: " + e.message; s.style.color="red"; });
-            });
+        function girisYap() {
+            const ad = document.getElementById('userInp').value.trim();
+            if(ad.length > 2) {
+                localStorage.setItem('asiret_ad', ad);
+                
+                // Rütbe Tanımlama
+                let rutbe = "ÜYE";
+                if(ad === "Sait Özer" || ad === "Sait Ozer") rutbe = "LİDER";
+                else if(ad.toLowerCase().includes("mehmet")) rutbe = "MUHAFIZ";
+                
+                localStorage.setItem('asiret_unvan', rutbe);
+                window.location.href = "meydan.html";
+            } else { alert("Lütfen geçerli bir isim girin!"); }
         }
     </script>
 </body>

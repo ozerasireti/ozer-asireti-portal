@@ -3,67 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sait Bey İçin Acil Çağrı</title>
+    <title>ÖZER AŞİRETİ | Resmi Portalı</title>
     <style>
-        body { background-color: #f0f2f5; margin: 0; padding: 10px; }
-        /* Mobil uyum için ufak ekleme */
-        article { width: 95% !important; }
-        button:hover { background-color: #a00000 !important; }
+        /* Genel Temeller */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Playfair Display', serif; /* Prestijli yazı tipi */
+            background-color: #0a0a0a; /* Asil siyah arka plan */
+            color: #e0e0e0;
+        }
+
+        /* Üst Menü / Banner */
+        header {
+            background: linear-gradient(to bottom, #1a1a1a, #000);
+            border-bottom: 2px solid #b8860b; /* Altın sarısı detay */
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .clan-name {
+            font-size: 45px;
+            letter-spacing: 5px;
+            color: #b8860b;
+            margin: 0;
+            text-transform: uppercase;
+            font-weight: 900;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .portal-subtitle {
+            font-size: 14px;
+            color: #888;
+            letter-spacing: 3px;
+            margin-top: 10px;
+        }
+
+        /* Haber İçerik Alanı */
+        .main-content {
+            max-width: 900px;
+            margin: -30px auto 40px; /* Header'ın üzerine biraz çıkması için */
+            background: #ffffff;
+            color: #1a1a1a;
+            padding: 50px;
+            border-radius: 4px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .news-category {
+            color: #8b0000;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 14px;
+            border-left: 4px solid #8b0000;
+            padding-left: 10px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 36px;
+            line-height: 1.2;
+            color: #000;
+            margin-bottom: 25px;
+        }
+
+        .lead-text {
+            font-size: 21px;
+            font-weight: bold;
+            line-height: 1.5;
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        .news-body {
+            font-family: 'Georgia', serif;
+            font-size: 18px;
+            line-height: 1.8;
+            color: #444;
+        }
+
+        .emergency-box {
+            background: #fff5f5;
+            border: 2px solid #8b0000;
+            padding: 20px;
+            margin: 30px 0;
+            font-style: italic;
+        }
+
+        /* Mesaj Formu Tasarımı */
+        .form-section {
+            margin-top: 50px;
+            padding-top: 40px;
+            border-top: 1px solid #eee;
+        }
+
+        .form-section h3 {
+            text-align: center;
+            color: #b8860b;
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            background: #fdfdfd;
+            font-size: 16px;
+            box-sizing: border-box;
+            border-radius: 0; /* Keskin köşeler daha ciddi durur */
+        }
+
+        button {
+            background: #1a1a1a;
+            color: #b8860b;
+            border: 1px solid #b8860b;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #b8860b;
+            color: #fff;
+        }
+
+        /* Footer / Himaye Yazısı */
+        footer {
+            text-align: center;
+            padding: 60px 20px;
+            background: #000;
+            color: #666;
+        }
+
+        .patronage {
+            color: #b8860b;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 600px) {
+            .main-content { padding: 20px; margin-top: 0; }
+            .clan-name { font-size: 30px; }
+        }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<article style="max-width: 800px; margin: 20px auto; font-family: 'Times New Roman', Times, serif; color: #2c3e50; line-height: 1.6; padding: 30px; border: 1px solid #e0e0e0; background-color: #fff; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-radius: 8px;">
+<header>
+    <h1 class="clan-name">ÖZER AŞİRETİ</h1>
+    <div class="portal-subtitle">RESMİ HABER VE BİLGİLENDİRME PORTALI</div>
+</header>
+
+<div class="main-content">
+    <div class="news-category">ACİL DURUM / DUYURU</div>
     
-    <h2 style="color: #8b0000; font-size: 32px; text-align: center; margin-bottom: 20px; border-bottom: 2px solid #8b0000; padding-bottom: 15px;">
-        Sait Bey İçin Zaman Daralıyor: "Bir Kalp Atışı Kadar Yakın, Bir Umut Kadar Uzak"
-    </h2>
+    <h2>Sait Bey İçin Zaman Daralıyor: <br>"Bir Kalp Atışı Kadar Yakın, Bir Umut Kadar Uzak"</h2>
 
-    <p style="font-size: 20px; font-weight: bold; margin-bottom: 20px; color: #1a252f;">
-        Sait Bey’in yaşam mücadelesinde artık kelimelerin tükendiği, sadece duaların ve tıbbın çaresiz kaldığı o kritik eşikteyiz.
+    <p class="lead-text">
+        Özer Aşireti’nin yaşam mücadelesinde artık kelimelerin tükendiği, sadece duaların ve tıbbın çaresiz kaldığı o kritik eşikteyiz.
     </p>
 
-    <p style="font-size: 18px; margin-bottom: 15px;">
-        Yıllardır süregelen kronik kalp hastalığıyla sessizce savaşan Sait Bey'den gelen son haberler yürekleri dağladı. Yapılan tetkikler sonucunda, Sait Bey’in kalp kapakçığının tamamen işlevini yitirdiği ve artık yerinde olmadığı tespit edildi. Bu acı tablo, onun her nefesini bir mucizeye, her bakışını bir vedaya dönüştürüyor.
-    </p>
+    <div class="news-body">
+        <p>Yıllardır süregelen kronik kalp hastalığıyla sessizce savaşan Sait Bey'den gelen son haberler yürekleri dağladı. Yapılan tetkikler sonucunda, Sait Bey’in kalp kapakçığının tamamen işlevini yitirdiği ve artık yerinde olmadığı tespit edildi.</p>
+        
+        <div class="emergency-box">
+            "Kalbi artık yorgun, kapakçığı yok..." Doktorların bu sözleri, sevdiklerinin kulaklarında çaresiz bir yankı gibi çınlıyor. Acil bir operasyon gerçekleşmezse, bu koca yürek yorgun düşecek.
+        </div>
 
-    <h2 style="color: #c0392b; font-size: 24px; margin-top: 30px;">Acil Ameliyat Şart!</h2>
-    
-    <p style="font-size: 18px; margin-bottom: 15px;">
-        Doktorlar, Sait Bey’in hayata tutunabilmesi için kaybedecek bir saniyesinin bile olmadığını belirtiyor. <strong>"Kalbi artık yorgun, kapakçığı yok"</strong> sözleri, sevdiklerinin kulaklarında çaresiz bir yankı gibi çınlıyor. Acil bir operasyon gerçekleşmezse, bu koca yürek yorgun düşecek.
-    </p>
+        <p>Şimdi hepimize düşen, bu hüzünlü hikâyeye bir umut ışığı olmak. Sait Bey’in yeniden nefes alabilmesi, ailesine ve sevdiklerine kavuşabilmesi için tüm dualarımız ve desteğimiz onunla.</p>
+    </div>
 
-    <p style="font-size: 18px; font-style: italic; color: #555; border-left: 5px solid #8b0000; padding-left: 20px; margin: 30px 0; background: #fff5f5; padding-top: 10px; padding-bottom: 10px;">
-        Şimdi hepimize düşen, bu hüzünlü hikâyeye bir umut ışığı olmak. Sait Bey’in yeniden nefes alabilmesi, ailesine ve sevdiklerine kavuşabilmesi için tüm dualarımız ve desteğimiz onunla.
-    </p>
-
-    <hr style="border: 0; border-top: 2px dotted #ccc; margin: 40px 0;">
-
-    <section style="background-color: #fdfdfd; padding: 25px; border: 1px solid #eee; border-radius: 10px;">
-        <h2 style="color: #333; font-size: 22px; margin-bottom: 15px; text-align: center;">Sait Bey'e Destek Mesajınızı Yazın</h2>
+    <section class="form-section">
+        <h3>Sait Bey'e Destek Mesajı Gönderin</h3>
         
         <form action="https://api.web3forms.com/submit" method="POST">
             <input type="hidden" name="access_key" value="d903409b-6323-43bf-acbf-57115c87bf6e">
             
-            <div style="margin-bottom: 15px;">
-                <label style="display:block; margin-bottom: 5px; font-weight: bold;">Adınız Soyadınız</label>
-                <input type="text" name="name" placeholder="Örn: Ahmet Yılmaz" required style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+            <div class="input-group">
+                <input type="text" name="name" placeholder="Adınız Soyadınız" required>
             </div>
 
-            <div style="margin-bottom: 15px;">
-                <label style="display:block; margin-bottom: 5px; font-weight: bold;">Mesajınız</label>
-                <textarea name="message" placeholder="Hüzünlü mesajınız veya yorumunuz..." required style="width: 100%; height: 120px; padding: 12px; border: 1px solid #ccc; border-radius: 5px; resize: vertical; font-size: 16px; font-family: inherit;"></textarea>
+            <div class="input-group">
+                <textarea name="message" rows="5" placeholder="Hüzünlü mesajınız veya dualarınız..." required></textarea>
             </div>
 
             <input type="checkbox" name="botcheck" style="display:none;">
 
-            <button type="submit" style="background-color: #8b0000; color: white; border: none; padding: 15px 25px; font-size: 18px; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold; transition: 0.3s;">
-                Yorumu ve Mesajı Gönder
-            </button>
+            <button type="submit">MESAJI AŞİRETE İLET</button>
         </form>
     </section>
+</div>
 
-</article>
+<footer>
+    <div class="patronage">Özer Aşiret Portalı, Sait Özen'in Himayesindedir.</div>
+    <p>&copy; 2024 Özer Aşireti. Tüm Hakları Saklıdır.</p>
+</footer>
 
 </body>
 </html>

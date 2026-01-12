@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Özer Aşireti | Üye Kayıt Sistemi</title>
+    <style>
+        body { background: #0a192f; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .form-box { background: white; color: #333; padding: 40px; border-radius: 15px; width: 350px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .form-box h2 { color: #b30000; margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 25px; box-sizing: border-box; }
+        .btn-kayit { background: #1b5e20; color: white; border: none; padding: 12px; width: 100%; border-radius: 25px; cursor: pointer; font-weight: bold; }
+        .info { font-size: 11px; color: #777; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="form-box">
+    <h2>Aşiret Kayıt</h2>
+    <p>Dijital Meydan'a girmek için e-posta ile doğrulanmış üyelik gereklidir.</p>
+    <input type="text" id="adSoyad" placeholder="Ad Soyad">
+    <input type="email" id="email" placeholder="E-posta Adresiniz">
+    <input type="password" id="sifre" placeholder="Şifre Belirleyin">
+    <button class="btn-kayit" onclick="kayitOl()">ÜYE OL VE KOD GÖNDER</button>
+    <p class="info">Doğrulama bağlantısı e-postanıza gönderilecektir.</p>
+</div>
+
+<script>
+    function kayitOl() {
+        alert("Sait Bey'in güvenlik protokolü devreye girdi.\nE-posta doğrulama sistemi için Firebase kurulumu gerekiyor.");
+        // Buraya Firebase Auth kodları gelecek
+    }
+</script>
+
+</body>
+</html>

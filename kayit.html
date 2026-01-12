@@ -2,39 +2,85 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>ÖZER AŞİRETİ GİRİŞ</title>
+    <title>Özer Aşireti | Üyelik Makamı</title>
     <style>
-        body { background: #0a192f; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .box { background: white; color: #333; padding: 40px; border-radius: 15px; width: 320px; text-align: center; border-top: 8px solid #b30000; }
-        input { width: 100%; padding: 15px; margin: 15px 0; border: 2px solid #ddd; border-radius: 30px; box-sizing: border-box; font-size: 18px; text-align: center; }
-        .btn { background: #1b5e20; color: white; border: none; padding: 15px; width: 100%; border-radius: 30px; cursor: pointer; font-weight: bold; font-size: 16px; }
+        body { background: #0a192f; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .form-box { background: white; color: #333; padding: 30px; border-radius: 15px; width: 350px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 25px; box-sizing: border-box; }
+        .btn { width: 100%; padding: 12px; border-radius: 25px; border: none; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        .btn-register { background: #1b5e20; color: white; }
+        .btn-login { background: #0a192f; color: white; }
+        .toggle-link { font-size: 13px; color: #b30000; cursor: pointer; margin-top: 15px; display: block; }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h2 style="color:#b30000; margin-top:0;">GİRİŞ MÜHRÜ</h2>
-        <p>Lütfen Aşiret Şifresini Giriniz</p>
-        
-        <input type="password" id="sifreInput" placeholder="Şifre">
-        
-        <button class="btn" onclick="girisYap()">KAPIYI AÇ</button>
-        
-        <p id="hata" style="color:red; font-size:13px; margin-top:10px;"></p>
-    </div>
 
-    <script>
-        function girisYap() {
-            var girilenSifre = document.getElementById('sifreInput').value;
-            
-            // ANAHTAR ŞİFRE BURADA: OZER21
-            if(girilenSifre === "OZER21" || girilenSifre === "ozer21") {
-                // Şifre doğruysa mail falan bekleme, direkt meydana git
-                localStorage.setItem('asiret_izin', 'verildi');
-                window.location.href = "meydan.html";
-            } else {
-                document.getElementById('hata').innerText = "Hatalı Şifre! Sait Bey'in belirlediği şifreyi girin.";
-            }
+<div class="form-box">
+    <h2 id="formTitle">ÜYE KAYDI</h2>
+    <p id="subTitle" style="font-size:12px;">E-postanıza doğrulama kodu gönderilecektir.</p>
+    
+    <input type="email" id="email" placeholder="E-posta Adresiniz">
+    <input type="password" id="pass" placeholder="Şifreniz">
+    
+    <button id="mainBtn" class="btn btn-register" onclick="islemYap()">KAYIT OL & ONAY GÖNDER</button>
+    
+    <span class="toggle-link" id="toggleLink" onclick="modDegistir()">Zaten üyeyim, Giriş Yap</span>
+    <p id="mesaj" style="font-size:12px; margin-top:10px; font-weight:bold;"></p>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyBJJEJO1FJCvPMF7n5LXX4DYrf3jBEvTlI",
+        authDomain: "ozer-asireti-portal.firebaseapp.com",
+        projectId: "ozer-asireti-portal",
+        storageBucket: "ozer-asireti-portal.firebasestorage.app",
+        messagingSenderId: "76823168812",
+        appId: "1:76823168812:web:e21ab7461ac3eec81b4e89"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    let isLoginMode = false;
+
+    function modDegistir() {
+        isLoginMode = !isLoginMode;
+        document.getElementById('formTitle').innerText = isLoginMode ? "ÜYE GİRİŞİ" : "ÜYE KAYDI";
+        document.getElementById('mainBtn').innerText = isLoginMode ? "GİRİŞ YAP" : "KAYIT OL & ONAY GÖNDER";
+        document.getElementById('mainBtn').className = isLoginMode ? "btn btn-login" : "btn btn-register";
+        document.getElementById('toggleLink').innerText = isLoginMode ? "Hesabın yok mu? Kayıt Ol" : "Zaten üyeyim, Giriş Yap";
+    }
+
+    function islemYap() {
+        const email = document.getElementById('email').value;
+        const pass = document.getElementById('pass').value;
+        const m = document.getElementById('mesaj');
+
+        if(isLoginMode) {
+            // GİRİŞ YAPMA
+            firebase.auth().signInWithEmailAndPassword(email, pass)
+            .then((userCredential) => {
+                if(userCredential.user.emailVerified) {
+                    window.location.href = "meydan.html";
+                } else {
+                    m.style.color = "orange";
+                    m.innerText = "Lütfen önce mailinize gelen linke tıklayıp onay verin!";
+                }
+            })
+            .catch(e => { m.style.color="red"; m.innerText = "Hata: " + e.message; });
+        } else {
+            // KAYIT OLMA
+            firebase.auth().createUserWithEmailAndPassword(email, pass)
+            .then((userCredential) => {
+                userCredential.user.sendEmailVerification().then(() => {
+                    m.style.color = "green";
+                    m.innerText = "BAŞARILI! E-postanıza bir onay linki gönderdik. Oraya tıklayıp sonra giriş yapın.";
+                });
+            })
+            .catch(e => { m.style.color="red"; m.innerText = "Hata: " + e.message; });
         }
-    </script>
+    }
+</script>
 </body>
 </html>

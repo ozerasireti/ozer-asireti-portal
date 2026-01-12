@@ -2,71 +2,39 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Özer Aşireti | Meydan</title>
+    <title>ÖZER AŞİRETİ GİRİŞ</title>
     <style>
-        body { margin: 0; font-family: sans-serif; background: #f0f2f5; }
-        .header { background: #0a192f; color: white; padding: 50px 20px 20px; text-align: center; border-bottom: 3px solid #ffd700; }
-        .container { max-width: 800px; margin: 20px auto; padding: 20px; display: none; }
-        .chat-box { background: white; border-radius: 15px; height: 500px; display: flex; flex-direction: column; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .messages { flex: 1; padding: 20px; overflow-y: auto; background: #f9fafb; }
-        .msg { background: white; padding: 10px; border-radius: 10px; margin-bottom: 10px; border-left: 5px solid #1b5e20; }
-        .input-area { padding: 15px; border-top: 1px solid #eee; display: flex; gap: 10px; }
-        input { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 25px; }
-        .btn { background: #b30000; color: white; border: none; padding: 10px 25px; border-radius: 25px; cursor: pointer; }
+        body { background: #0a192f; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .box { background: white; color: #333; padding: 40px; border-radius: 15px; width: 320px; text-align: center; border-top: 8px solid #b30000; }
+        input { width: 100%; padding: 15px; margin: 15px 0; border: 2px solid #ddd; border-radius: 30px; box-sizing: border-box; font-size: 18px; text-align: center; }
+        .btn { background: #1b5e20; color: white; border: none; padding: 15px; width: 100%; border-radius: 30px; cursor: pointer; font-weight: bold; font-size: 16px; }
     </style>
 </head>
 <body>
-    <script>
-        // Şifre kontrolü - Kapıdaki Nöbetçi
-        if(localStorage.getItem('asiret_giris') !== 'onayli') {
-            window.location.href = "kayit.html";
-        }
-    </script>
-
-    <div class="header">
-        <h2>AŞİRET MEYDANI</h2>
-        <a href="index.html" style="color:#ffd700; text-decoration:none; font-size:12px;">← ANA SAYFA</a>
-    </div>
-
-    <div class="container" id="meydanContent" style="display:block;">
-        <div class="chat-box">
-            <div class="messages" id="chatArea">
-                <div class="msg"><b>Sistem:</b> Meydan'a hoş geldiniz. Saygılı sohbetler dileriz.</div>
-            </div>
-            <div class="input-area">
-                <input type="text" id="uName" placeholder="Adınız" style="max-width:100px;">
-                <input type="text" id="uMsg" placeholder="Mesajınız...">
-                <button class="btn" onclick="gonder()">GÖNDER</button>
-            </div>
-        </div>
+    <div class="box">
+        <h2 style="color:#b30000; margin-top:0;">GİRİŞ MÜHRÜ</h2>
+        <p>Lütfen Aşiret Şifresini Giriniz</p>
+        
+        <input type="password" id="sifreInput" placeholder="Şifre">
+        
+        <button class="btn" onclick="girisYap()">KAPIYI AÇ</button>
+        
+        <p id="hata" style="color:red; font-size:13px; margin-top:10px;"></p>
     </div>
 
     <script>
-        function gonder() {
-            const ad = document.getElementById('uName').value || "Üye";
-            const msj = document.getElementById('uMsg').value;
-            if(msj) {
-                const alan = document.getElementById('chatArea');
-                alan.innerHTML += `<div class="msg"><b>${ad}:</b><br>${msj}</div>`;
-                alan.scrollTop = alan.scrollHeight;
-                document.getElementById('uMsg').value = "";
-                
-                // Mesajları tarayıcı hafızasına kaydet (Sayfa yenilense de gitmesin)
-                let eski = JSON.parse(localStorage.getItem('meydan_mesajlar')) || [];
-                eski.push({ad, msj});
-                localStorage.setItem('meydan_mesajlar', JSON.stringify(eski));
+        function girisYap() {
+            var girilenSifre = document.getElementById('sifreInput').value;
+            
+            // ANAHTAR ŞİFRE BURADA: OZER21
+            if(girilenSifre === "OZER21" || girilenSifre === "ozer21") {
+                // Şifre doğruysa mail falan bekleme, direkt meydana git
+                localStorage.setItem('asiret_izin', 'verildi');
+                window.location.href = "meydan.html";
+            } else {
+                document.getElementById('hata').innerText = "Hatalı Şifre! Sait Bey'in belirlediği şifreyi girin.";
             }
         }
-
-        // Sayfa açıldığında eski mesajları yükle
-        window.onload = function() {
-            let eski = JSON.parse(localStorage.getItem('meydan_mesajlar')) || [];
-            const alan = document.getElementById('chatArea');
-            eski.forEach(m => {
-                alan.innerHTML += `<div class="msg"><b>${m.ad}:</b><br>${m.msj}</div>`;
-            });
-            alan.scrollTop = alan.scrollHeight;
-        };
     </script>
 </body>
 </html>

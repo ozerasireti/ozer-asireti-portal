@@ -3,271 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ÖZER AŞİRETİ | Resmi Portalı</title>
+    <title>Özer Aşireti | Web 3 Dijital Meydan</title>
     <style>
-        /* Genel Temeller */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Playfair Display', serif; /* Prestijli yazı tipi */
-            background-color: #0a0a0a; /* Asil siyah arka plan */
-            color: #e0e0e0;
+        body { margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; background-color: #f0f2f5; overflow-x: hidden; }
+
+        /* RENK DİZAYNI */
+        .color-stripes { position: fixed; top: 0; width: 100%; z-index: 10002; }
+        .stripe-red { background: #b30000; height: 10px; }
+        .stripe-white { background: #ffffff; height: 8px; }
+        .stripe-green { background: #1b5e20; height: 8px; }
+
+        /* LOADER */
+        #loader-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #0a192f; z-index: 10001;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 0.8s ease-out;
         }
 
-        /* Üst Menü / Banner */
-        header {
-            background: linear-gradient(to bottom, #1a1a1a, #000);
-            border-bottom: 2px solid #b8860b; /* Altın sarısı detay */
-            padding: 40px 20px;
-            text-align: center;
-        }
+        /* ANA İÇERİK */
+        .header { background: #0a192f; color: white; padding: 70px 20px 30px; text-align: center; border-bottom: 5px solid #ffd700; }
+        .main-content { max-width: 800px; margin: 40px auto; padding: 0 20px; opacity: 0; transition: opacity 1s; }
+        
+        .news-card { background: white; border-radius: 12px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-left: 8px solid #b30000; margin-bottom: 30px; }
 
-        .clan-name {
-            font-size: 45px;
-            letter-spacing: 5px;
-            color: #b8860b;
-            margin: 0;
-            text-transform: uppercase;
-            font-weight: 900;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
+        /* YORUM / MESAJ ALANI (WEB 3 TARZI) */
+        .forum-section { background: white; border-radius: 12px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .comment-input { width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 10px; resize: none; font-family: inherit; }
+        .submit-btn { background: #0a192f; color: white; border: none; padding: 12px 25px; border-radius: 50px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .submit-btn:hover { background: #b30000; transform: scale(1.05); }
 
-        .portal-subtitle {
-            font-size: 14px;
-            color: #888;
-            letter-spacing: 3px;
-            margin-top: 10px;
-        }
+        .comment-list { margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; }
+        .comment-item { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #1b5e20; }
+        .comment-name { font-weight: bold; color: #0a192f; font-size: 14px; }
+        .comment-text { margin-top: 5px; color: #555; font-size: 15px; }
 
-        /* Haber İçerik Alanı */
-        .main-content {
-            max-width: 900px;
-            margin: -30px auto 40px; /* Header'ın üzerine biraz çıkması için */
-            background: #ffffff;
-            color: #1a1a1a;
-            padding: 50px;
-            border-radius: 4px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        .news-category {
-            color: #8b0000;
-            font-weight: bold;
-            text-transform: uppercase;
-            font-size: 14px;
-            border-left: 4px solid #8b0000;
-            padding-left: 10px;
-            margin-bottom: 20px;
-        }
-
-        h2 {
-            font-size: 36px;
-            line-height: 1.2;
-            color: #000;
-            margin-bottom: 25px;
-        }
-
-        .lead-text {
-            font-size: 21px;
-            font-weight: bold;
-            line-height: 1.5;
-            color: #333;
-            margin-bottom: 25px;
-        }
-
-        .news-body {
-            font-family: 'Georgia', serif;
-            font-size: 18px;
-            line-height: 1.8;
-            color: #444;
-        }
-
-        .emergency-box {
-            background: #fff5f5;
-            border: 2px solid #8b0000;
-            padding: 20px;
-            margin: 30px 0;
-            font-style: italic;
-        }
-
-        /* Mesaj Formu Tasarımı */
-        .form-section {
-            margin-top: 50px;
-            padding-top: 40px;
-            border-top: 1px solid #eee;
-        }
-
-        .form-section h3 {
-            text-align: center;
-            color: #b8860b;
-            font-size: 24px;
-            margin-bottom: 30px;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 15px;
-            border: 1px solid #ddd;
-            background: #fdfdfd;
-            font-size: 16px;
-            box-sizing: border-box;
-            border-radius: 0; /* Keskin köşeler daha ciddi durur */
-        }
-
-        button {
-            background: #1a1a1a;
-            color: #b8860b;
-            border: 1px solid #b8860b;
-            padding: 15px 40px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s;
-        }
-
-        button:hover {
-            background: #b8860b;
-            color: #fff;
-        }
-
-        /* Footer / Himaye Yazısı */
-        footer {
-            text-align: center;
-            padding: 60px 20px;
-            background: #000;
-            color: #666;
-        }
-
-        .patronage {
-            color: #b8860b;
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            letter-spacing: 1px;
-        }
-
-        @media (max-width: 600px) {
-            .main-content { padding: 20px; margin-top: 0; }
-            .clan-name { font-size: 30px; }
-        }
+        .pulse-text { animation: pulse 1.5s infinite; color: #ffd700; font-size: 14px; letter-spacing: 2px; }
+        @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="loader-wrapper" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0a192f; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-    <div style="width: 100%; height: 5px; background: #b30000; position: absolute; top: 0;"></div>
-    <div style="width: 100%; height: 5px; background: #ffffff; position: absolute; top: 5px;"></div>
-    <div style="width: 100%; height: 5px; background: #1b5e20; position: absolute; top: 10px;"></div>
 
-    <div style="text-align: center;">
-        <h2 style="color: white; font-family: 'Segoe UI', sans-serif; letter-spacing: 5px; margin-bottom: 20px; animation: flash 1.5s infinite;">ÖZER PORTAL</h2>
-        <div style="width: 200px; height: 2px; background: #444; margin: auto; position: relative; overflow: hidden;">
-            <div id="progress-bar" style="width: 0%; height: 100%; background: #ffd700; transition: width 0.5s;"></div>
-        </div>
-        <p id="loader-text" style="color: #ffd700; font-family: 'Segoe UI', sans-serif; font-size: 12px; margin-top: 15px; text-transform: uppercase; letter-spacing: 2px;">Güvenli Bağlantı Kuruluyor...</p>
+    <div class="color-stripes">
+        <div class="stripe-red"></div>
+        <div class="stripe-white"></div>
+        <div class="stripe-green"></div>
     </div>
-</div>
 
-<style>
-    @keyframes flash {
-        0% { opacity: 0.3; }
-        50% { opacity: 1; }
-        100% { opacity: 0.3; }
-    }
-</style>
+    <div id="loader-overlay">
+        <div style="text-align:center; color:white;">
+            <h2 style="letter-spacing: 6px;">ÖZER WEB 3</h2>
+            <p class="pulse-text" id="status-text">AŞİRET AĞI DOĞRULANIYOR...</p>
+        </div>
+    </div>
 
-<script>
-    window.onload = function() {
-        var progressBar = document.getElementById('progress-bar');
-        var loaderText = document.getElementById('loader-text');
-        var loaderWrapper = document.getElementById('loader-wrapper');
-        
-        var adimlar = ["Arşivler taranıyor...", "Veri güvenliği kontrol ediliyor...", "Haber akışı senkronize ediliyor...", "Sait Özer Portalı Hazır."];
-        var i = 0;
-        
-        // Barı doldurma simülasyonu
-        var interval = setInterval(function() {
-            if (i < 100) {
-                i += 1;
-                progressBar.style.width = i + "%";
-                
-                if(i == 25) loaderText.innerText = adimlar[0];
-                if(i == 50) loaderText.innerText = adimlar[1];
-                if(i == 75) loaderText.innerText = adimlar[2];
-                if(i == 95) loaderText.innerText = adimlar[3];
-            } else {
-                clearInterval(interval);
-                // 3 saniye sonra ekranı kaybet
-                setTimeout(function() {
-                    loaderWrapper.style.transition = "0.5s";
-                    loaderWrapper.style.opacity = "0";
-                    setTimeout(function() {
-                        loaderWrapper.style.display = "none";
-                    }, 500);
-                }, 500);
-            }
-        }, 30);
-    };
-</script>
+    <div class="header">
+        <h1>ÖZER AŞİRETİ DİJİTAL MEYDANI</h1>
+        <p>Geleneksel Güç, Modern Teknoloji</p>
+    </div>
 
-<header>
-    <h1 class="clan-name">ÖZER AŞİRETİ</h1>
-    <div class="portal-subtitle">RESMİ HABER VE BİLGİLENDİRME PORTALI</div>
-</header>
-
-<div class="main-content">
-    <div class="news-category">ACİL DURUM / DUYURU</div>
-    
-    <h2>Sait Bey İçin Zaman Daralıyor: <br>"Bir Kalp Atışı Kadar Yakın, Bir Umut Kadar Uzak"</h2>
-
-    <p class="lead-text">
-        Özer Aşireti’nin yaşam mücadelesinde artık kelimelerin tükendiği, sadece duaların ve tıbbın çaresiz kaldığı o kritik eşikteyiz.
-    </p>
-
-    <div class="news-body">
-        <p>Yıllardır süregelen kronik kalp hastalığıyla sessizce savaşan Sait Bey'den gelen son haberler yürekleri dağladı. Yapılan tetkikler sonucunda, Sait Bey’in kalp kapakçığının tamamen işlevini yitirdiği ve artık yerinde olmadığı tespit edildi.</p>
-        
-        <div class="emergency-box">
-            "Kalbi artık yorgun, kapakçığı yok..." Doktorların bu sözleri, sevdiklerinin kulaklarında çaresiz bir yankı gibi çınlıyor. Acil bir operasyon gerçekleşmezse, bu koca yürek yorgun düşecek.
+    <div class="main-content" id="main-site">
+        <div class="news-card">
+            <h2 style="color:#0a192f; margin-top:0;">KALENDER APARTMANI TADİLATI VE VEFA</h2>
+            <p style="line-height:1.6; color:#444;">Sait Bey'in iki binayı birleştirerek başlattığı bu büyük tadilat projesi, sadece bir inşaat değil, halkın rızasıyla örülen bir gönül köprüsüdür.</p>
         </div>
 
-        <p>Şimdi hepimize düşen, bu hüzünlü hikâyeye bir umut ışığı olmak. Sait Bey’in yeniden nefes alabilmesi, ailesine ve sevdiklerine kavuşabilmesi için tüm dualarımız ve desteğimiz onunla.</p> <div class="news-card" style="margin-top: 40px; border-left: 10px solid #b30000; background: #fffcfc;">
-    <div class="news-content">
-      
-    </div>
-</div>
-    </div>
-
-    <section class="form-section">
-        <h3>Sait Bey'e Destek Mesajı Gönderin</h3>
-        
-        <form action="https://api.web3forms.com/submit" method="POST">
-            <input type="hidden" name="access_key" value="d903409b-6323-43bf-acbf-57115c87bf6e">
+        <div class="forum-section">
+            <h3 style="color:#0a192f; margin-top:0;">Sait Bey'e Mesaj Bırakın</h3>
+            <p style="font-size:13px; color:#777;">Mesajlarınız Sait Bey'in özel kalemine doğrudan iletilir.</p>
             
-            <div class="input-group">
-                <input type="text" name="name" placeholder="Adınız Soyadınız" required>
+            <input type="text" id="userName" class="comment-input" placeholder="Adınız Soyadınız" style="height:40px;">
+            <textarea id="userComment" class="comment-input" rows="3" placeholder="Mesajınızı veya duanızı buraya yazın..."></textarea>
+            <button class="submit-btn" onclick="addComment()">Gönder (Onaya Gönder)</button>
+
+            <div class="comment-list" id="commentList">
+                <div class="comment-item">
+                    <div class="comment-name">Özer Aşireti Mensubu</div>
+                    <div class="comment-text">Allah Sait Bey’den razı olsun, Kalender Apartmanı’na sahip çıkması bizleri çok gururlandırdı.</div>
+                </div>
             </div>
+        </div>
+    </div>
 
-            <div class="input-group">
-                <textarea name="message" rows="5" placeholder="Hüzünlü mesajınız veya dualarınız..." required></textarea>
-            </div>
+    <script>
+        // Yükleme Ekranı Kontrolü
+        window.onload = function() {
+            setTimeout(function() {
+                document.getElementById('loader-overlay').style.opacity = "0";
+                document.getElementById('main-site').style.opacity = "1";
+                setTimeout(function() { document.getElementById('loader-overlay').style.display = "none"; }, 800);
+            }, 2000);
+        };
 
-            <input type="checkbox" name="botcheck" style="display:none;">
+        // Yorum Ekleme Fonksiyonu
+        function addComment() {
+            var name = document.getElementById('userName').value;
+            var text = document.getElementById('userComment').value;
 
-            <button type="submit">MESAJI AŞİRETE İLET</button>
-        </form>
-    </section>
-</div>
-
-<footer>
-    <div class="patronage">Özer Aşiret Portalı, Sait Özer'in Himayesindedir.</div>
-    <p>&copy; 2026 Özer Aşireti. Tüm Hakları Saklıdır.</p>
-</footer>
-
+            if(name && text) {
+                var list = document.getElementById('commentList');
+                var newItem = document.createElement('div');
+                newItem.className = 'comment-item';
+                newItem.innerHTML = '<div class="comment-name">' + name + '</div><div class="comment-text">' + text + '</div>';
+                
+                list.insertBefore(newItem, list.firstChild);
+                
+                // Formu temizle
+                document.getElementById('userName').value = "";
+                document.getElementById('userComment').value = "";
+                alert("Mesajınız Sait Bey'in özel kalemine iletildi. Teşekkür ederiz.");
+            } else {
+                alert("Lütfen tüm alanları doldurun.");
+            }
+        }
+    </script>
 </body>
 </html>

@@ -159,6 +159,61 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div id="loader-wrapper" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0a192f; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+    <div style="width: 100%; height: 5px; background: #b30000; position: absolute; top: 0;"></div>
+    <div style="width: 100%; height: 5px; background: #ffffff; position: absolute; top: 5px;"></div>
+    <div style="width: 100%; height: 5px; background: #1b5e20; position: absolute; top: 10px;"></div>
+
+    <div style="text-align: center;">
+        <h2 style="color: white; font-family: 'Segoe UI', sans-serif; letter-spacing: 5px; margin-bottom: 20px; animation: flash 1.5s infinite;">ÖZER PORTAL</h2>
+        <div style="width: 200px; height: 2px; background: #444; margin: auto; position: relative; overflow: hidden;">
+            <div id="progress-bar" style="width: 0%; height: 100%; background: #ffd700; transition: width 0.5s;"></div>
+        </div>
+        <p id="loader-text" style="color: #ffd700; font-family: 'Segoe UI', sans-serif; font-size: 12px; margin-top: 15px; text-transform: uppercase; letter-spacing: 2px;">Güvenli Bağlantı Kuruluyor...</p>
+    </div>
+</div>
+
+<style>
+    @keyframes flash {
+        0% { opacity: 0.3; }
+        50% { opacity: 1; }
+        100% { opacity: 0.3; }
+    }
+</style>
+
+<script>
+    window.onload = function() {
+        var progressBar = document.getElementById('progress-bar');
+        var loaderText = document.getElementById('loader-text');
+        var loaderWrapper = document.getElementById('loader-wrapper');
+        
+        var adimlar = ["Arşivler taranıyor...", "Veri güvenliği kontrol ediliyor...", "Haber akışı senkronize ediliyor...", "Sait Özer Portalı Hazır."];
+        var i = 0;
+        
+        // Barı doldurma simülasyonu
+        var interval = setInterval(function() {
+            if (i < 100) {
+                i += 1;
+                progressBar.style.width = i + "%";
+                
+                if(i == 25) loaderText.innerText = adimlar[0];
+                if(i == 50) loaderText.innerText = adimlar[1];
+                if(i == 75) loaderText.innerText = adimlar[2];
+                if(i == 95) loaderText.innerText = adimlar[3];
+            } else {
+                clearInterval(interval);
+                // 3 saniye sonra ekranı kaybet
+                setTimeout(function() {
+                    loaderWrapper.style.transition = "0.5s";
+                    loaderWrapper.style.opacity = "0";
+                    setTimeout(function() {
+                        loaderWrapper.style.display = "none";
+                    }, 500);
+                }, 500);
+            }
+        }, 30);
+    };
+</script>
 
 <header>
     <h1 class="clan-name">ÖZER AŞİRETİ</h1>
@@ -183,24 +238,7 @@
 
         <p>Şimdi hepimize düşen, bu hüzünlü hikâyeye bir umut ışığı olmak. Sait Bey’in yeniden nefes alabilmesi, ailesine ve sevdiklerine kavuşabilmesi için tüm dualarımız ve desteğimiz onunla.</p> <div class="news-card" style="margin-top: 40px; border-left: 10px solid #b30000; background: #fffcfc;">
     <div class="news-content">
-        <span class="tag" style="background: #0a192f;">RESMİ TEBLİĞ</span>
-        <h1 class="headline">SAİT ÖZER’DEN AHMET ÖZER’E <br>TARİHİ VE VAKUR UYARI</h1>
-        <p class="sub-headline" style="color: #b30000;">"Aşiret Adabı, Şahsi İkballerin Üstündedir"</p>
-        
-        <div class="story">
-            <p>Özer Aşireti'nin birliği ve yüzyıllardır süregelen kadim töreleri, bugün Sait Bey'in önemli bir açıklamasıyla yeniden hatırlatıldı. Sait Bey, aşiret mensuplarından Ahmet Özer'e yönelik, kapalı kapılar ardında değil, bizzat aşiret vakarına yakışır bir şekilde <strong>"istikamet"</strong> uyarısında bulundu.</p>
-            
-            <div class="highlight-box" style="border-color: #0a192f; background: #f4f4f4;">
-                <strong style="color: #0a192f; font-size: 19px;">"BİZİM YOLUMUZDA BEN DEĞİL, BİZ VARDIR"</strong><br><br>
-                Sait Bey mesajında şu ifadelere yer verdi: <em>"Aşiretimizin ismi, hiçbir şahsi hırsın veya fevri kararın gölgesinde kalamaz. Ahmet Özer evladımızın attığı adımlarda ailemizin ağırlığını ve sorumluluğunu daha derinden hissetmesi elzemdir. Unutulmamalıdır ki; asalet, sessizlikte ve itaattedir."</em>
-            </div>
-
-            <p style="font-weight: 500;">Haber Merkezimize gelen bilgilere göre bu uyarı, aşiret içindeki disiplini sağlamak ve Ahmet Özer'in son dönemdeki bazı girişimlerini aile disiplini çerçevesine çekmek amacıyla yapıldı. Sait Bey’in bu "baba şefkati ama lider otoritesi" kokan mesajı, camia içerisinde 'Düzen Yeniden Kuruluyor' şeklinde yorumlandı.</p>
-        </div>
-
-        <div style="text-align: right; margin-top: 20px;">
-            <span style="font-style: italic; color: #b30000; font-weight: bold;">"Sözümüz bir, özümüz bir, yolumuz bellidir."</span>
-        </div>
+      
     </div>
 </div>
     </div>

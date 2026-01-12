@@ -3,85 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Özer Aşireti | Güvenli Kayıt</title>
+    <title>Özer Aşireti | Giriş</title>
     <style>
-        body { background: #0a192f; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .box { background: white; color: #333; padding: 30px; border-radius: 15px; width: 90%; max-width: 350px; text-align: center; border-top: 10px solid #b30000; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 25px; box-sizing: border-box; }
-        .btn { width: 100%; padding: 12px; border-radius: 25px; border: none; cursor: pointer; font-weight: bold; margin-top: 10px; transition: 0.3s; }
-        .btn-reg { background: #1b5e20; color: white; }
-        .btn-log { background: #0a192f; color: white; }
-        .status { font-size: 13px; margin-top: 15px; font-weight: bold; }
-        .toggle { font-size: 12px; color: #b30000; cursor: pointer; display: block; margin-top: 15px; text-decoration: underline; }
+        body { background: #0a192f; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .box { background: white; color: #333; padding: 30px; border-radius: 15px; width: 320px; text-align: center; border-top: 10px solid #b30000; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 25px; box-sizing: border-box; text-align: center; }
+        .btn { width: 100%; padding: 12px; border-radius: 25px; border: none; cursor: pointer; font-weight: bold; background: #1b5e20; color: white; }
+        #status { font-size: 12px; margin-top: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
+    <div class="box">
+        <h2 style="color:#b30000">AŞİRET KAYDI</h2>
+        <p style="font-size:12px;">E-postanıza onay kodu (link) gelecektir.</p>
+        <input type="email" id="email" placeholder="E-posta Adresiniz">
+        <input type="password" id="pass" placeholder="Şifreniz">
+        <button class="btn" onclick="kayitOl()">KAYIT OL VE ONAY BEKLE</button>
+        <p onclick="location.reload()" style="font-size:10px; color:blue; cursor:pointer; margin-top:10px;">Sayfayı Yenile / Giriş Yap</p>
+        <div id="status"></div>
+    </div>
 
-<div class="box">
-    <h2 id="title">AŞİRET KAYDI</h2>
-    <p id="subTitle" style="font-size:11px;">Meydan'a giriş için e-posta onayı zorunludur.</p>
-    
-    <input type="email" id="email" placeholder="E-posta Adresiniz">
-    <input type="password" id="pass" placeholder="Şifreniz">
-    
-    <button id="actionBtn" class="btn btn-reg" onclick="baslat()">KAYIT OL & ONAY GÖNDER</button>
-    <span class="toggle" id="toggleLink" onclick="modDegistir()">Zaten üyeyim, Giriş Yap</span>
-    
-    <div id="result" class="status"></div>
-</div>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script>
+        const config = {
+            apiKey: "AIzaSyBJJEJO1FJCvPMF7n5LXX4DYrf3jBEvTlI",
+            authDomain: "ozer-asireti-portal.firebaseapp.com",
+            projectId: "ozer-asireti-portal",
+            storageBucket: "ozer-asireti-portal.firebasestorage.app",
+            messagingSenderId: "76823168812",
+            appId: "1:76823168812:web:e21ab7461ac3eec81b4e89"
+        };
+        firebase.initializeApp(config);
 
-<script>
-    const firebaseConfig = {
-        apiKey: "AIzaSyBJJEJO1FJCvPMF7n5LXX4DYrf3jBEvTlI",
-        authDomain: "ozer-asireti-portal.firebaseapp.com",
-        projectId: "ozer-asireti-portal",
-        storageBucket: "ozer-asireti-portal.firebasestorage.app",
-        messagingSenderId: "76823168812",
-        appId: "1:76823168812:web:e21ab7461ac3eec81b4e89"
-    };
-    if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+        function kayitOl() {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('pass').value;
+            const s = document.getElementById('status');
 
-    let isLogin = false;
-
-    function modDegistir() {
-        isLogin = !isLogin;
-        document.getElementById('title').innerText = isLogin ? "ÜYE GİRİŞİ" : "AŞİRET KAYDI";
-        document.getElementById('actionBtn').innerText = isLogin ? "GİRİŞ YAP" : "KAYIT OL & ONAY GÖNDER";
-        document.getElementById('actionBtn').className = isLogin ? "btn btn-log" : "btn btn-reg";
-        document.getElementById('toggleLink').innerText = isLogin ? "Hesabım yok, Kayıt Ol" : "Zaten üyeyim, Giriş Yap";
-    }
-
-    function baslat() {
-        const mail = document.getElementById('email').value;
-        const sifre = document.getElementById('pass').value;
-        const res = document.getElementById('result');
-        res.innerText = "İşlem yapılıyor...";
-
-        if(isLogin) {
-            firebase.auth().signInWithEmailAndPassword(mail, sifre)
-            .then((userCredential) => {
-                if(userCredential.user.emailVerified) {
-                    window.location.href = "meydan.html";
-                } else {
-                    res.style.color = "orange";
-                    res.innerText = "DUR! E-postana gelen linke tıklamadın. Lütfen onay ver.";
-                }
+            // Önce giriş yapmayı dener, hesap yoksa kayıt eder
+            firebase.auth().signInWithEmailAndPassword(email, pass)
+            .then((u) => {
+                if(u.user.emailVerified) { window.location.href = "meydan.html"; }
+                else { s.innerText = "Lütfen önce e-postanızdaki linke tıklayın!"; s.style.color="orange"; }
             })
-            .catch(e => { res.style.color="red"; res.innerText = "Hata: " + e.message; });
-        } else {
-            firebase.auth().createUserWithEmailAndPassword(mail, sifre)
-            .then((userCredential) => {
-                userCredential.user.sendEmailVerification().then(() => {
-                    res.style.color = "green";
-                    res.innerText = "MÜHÜRLÜ ONAY GÖNDERİLDİ! Mailini kontrol et, linke tıkla, sonra giriş yap.";
-                });
-            })
-            .catch(e => { res.style.color="red"; res.innerText = "Hata: " + e.message; });
+            .catch(() => {
+                firebase.auth().createUserWithEmailAndPassword(email, pass)
+                .then((u) => {
+                    u.user.sendEmailVerification();
+                    s.innerText = "Onay maili gönderildi! Lütfen kutunuzu (ve spamı) kontrol edin.";
+                    s.style.color = "green";
+                })
+                .catch(e => { s.innerText = "Hata: " + e.message; s.style.color="red"; });
+            });
         }
-    }
-</script>
+    </script>
 </body>
 </html>

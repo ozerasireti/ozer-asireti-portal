@@ -3,119 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Özer Aşireti | Web 3 Dijital Meydan</title>
+    <title>Özer Aşireti | Resmi Makam</title>
     <style>
-        body { margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; background-color: #f0f2f5; overflow-x: hidden; }
-
-        /* RENK DİZAYNI */
+        body { margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f4f4; }
         .color-stripes { position: fixed; top: 0; width: 100%; z-index: 10002; }
         .stripe-red { background: #b30000; height: 10px; }
         .stripe-white { background: #ffffff; height: 8px; }
         .stripe-green { background: #1b5e20; height: 8px; }
 
-        /* LOADER */
-        #loader-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #0a192f; z-index: 10001;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: opacity 0.8s ease-out;
-        }
+        /* NAVİGASYON MENÜSÜ */
+        .nav-bar { background: white; padding: 15px; text-align: center; border-bottom: 2px solid #ffd700; margin-top: 26px; }
+        .nav-bar a { text-decoration: none; color: #333; font-weight: bold; margin: 0 15px; font-size: 14px; }
+        .btn-meydan { color: #b30000 !important; border: 2px solid #b30000; padding: 8px 20px; border-radius: 25px; transition: 0.3s; }
+        .btn-meydan:hover { background: #b30000; color: white !important; }
 
-        /* ANA İÇERİK */
-        .header { background: #0a192f; color: white; padding: 70px 20px 30px; text-align: center; border-bottom: 5px solid #ffd700; }
-        .main-content { max-width: 800px; margin: 40px auto; padding: 0 20px; opacity: 0; transition: opacity 1s; }
-        
-        .news-card { background: white; border-radius: 12px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-left: 8px solid #b30000; margin-bottom: 30px; }
-
-        /* YORUM / MESAJ ALANI (WEB 3 TARZI) */
-        .forum-section { background: white; border-radius: 12px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
-        .comment-input { width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 10px; resize: none; font-family: inherit; }
-        .submit-btn { background: #0a192f; color: white; border: none; padding: 12px 25px; border-radius: 50px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .submit-btn:hover { background: #b30000; transform: scale(1.05); }
-
-        .comment-list { margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; }
-        .comment-item { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #1b5e20; }
-        .comment-name { font-weight: bold; color: #0a192f; font-size: 14px; }
-        .comment-text { margin-top: 5px; color: #555; font-size: 15px; }
-
-        .pulse-text { animation: pulse 1.5s infinite; color: #ffd700; font-size: 14px; letter-spacing: 2px; }
-        @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+        .header { background: #0a192f; color: white; padding: 50px 20px 30px; text-align: center; }
+        .main-container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
+        .news-card { background: white; border-radius: 12px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-left: 10px solid #b30000; }
+        .footer { background: #0a192f; color: white; text-align: center; padding: 20px; margin-top: 50px; }
     </style>
 </head>
 <body>
-
     <div class="color-stripes">
-        <div class="stripe-red"></div>
-        <div class="stripe-white"></div>
-        <div class="stripe-green"></div>
-    </div><a href="meydan.html" style="color: #b30000; font-weight: bold; text-decoration: none; border: 1px solid #b30000; padding: 5px 15px; border-radius: 20px;">AŞİRET MEYDANI</a>
+        <div class="stripe-red"></div><div class="stripe-white"></div><div class="stripe-green"></div>
+    </div>
 
-    <div id="loader-overlay">
-        <div style="text-align:center; color:white;">
-            <h2 style="letter-spacing: 6px;">ÖZER WEB 3</h2>
-            <p class="pulse-text" id="status-text">AŞİRET AĞI DOĞRULANIYOR...</p>
-        </div>
+    <div class="nav-bar">
+        <a href="index.html">ANA SAYFA</a>
+        <a href="meydan.html" class="btn-meydan">🏛️ AŞİRET MEYDANI (CANLI)</a>
+        <a href="#">BÜYÜKLERİMİZ</a>
     </div>
 
     <div class="header">
-        <h1>ÖZER AŞİRETİ DİJİTAL MEYDANI</h1>
-        <p>Geleneksel Güç, Modern Teknoloji</p>
+        <h1>ÖZER AŞİRETİ HABER MERKEZİ</h1>
+        <p>Sait Özer Himayesinde "Gönül Seferberliği"</p>
     </div>
 
-    <div class="main-content" id="main-site">
+    <div class="main-container">
         <div class="news-card">
-            <h2 style="color:#0a192f; margin-top:0;">KALENDER APARTMANI TADİLATI VE VEFA</h2>
-            <p style="line-height:1.6; color:#444;">Sait Bey'in iki binayı birleştirerek başlattığı bu büyük tadilat projesi, sadece bir inşaat değil, halkın rızasıyla örülen bir gönül köprüsüdür.</p>
-        </div>
-
-        <div class="forum-section">
-            <h3 style="color:#0a192f; margin-top:0;">Sait Bey'e Mesaj Bırakın</h3>
-            <p style="font-size:13px; color:#777;">Mesajlarınız Sait Bey'in özel kalemine doğrudan iletilir.</p>
-            
-            <input type="text" id="userName" class="comment-input" placeholder="Adınız Soyadınız" style="height:40px;">
-            <textarea id="userComment" class="comment-input" rows="3" placeholder="Mesajınızı veya duanızı buraya yazın..."></textarea>
-            <button class="submit-btn" onclick="addComment()">Gönder (Onaya Gönder)</button>
-
-            <div class="comment-list" id="commentList">
-                <div class="comment-item">
-                    <div class="comment-name">Özer Aşireti Mensubu</div>
-                    <div class="comment-text">Allah Sait Bey’den razı olsun, Kalender Apartmanı’na sahip çıkması bizleri çok gururlandırdı.</div>
-                </div>
-            </div>
+            <h2 style="color: #0a192f;">KALENDER APARTMANI: VEFA VE RIZA İNŞAATI</h2>
+            <p style="font-size: 18px; line-height: 1.8; color: #333;">
+                Sait Bey, aşiretin hafızası olan <strong>Kalender Apartmanı</strong>'nı halkın rızasını alarak büyük bir tadilata soktu. 
+                "Bizim davamız taş değil, gönül yapmaktır" diyen Sait Bey, bu binaları gençlerin geleceğine adayarak halkın büyük takdirini topladı.
+            </p>
         </div>
     </div>
 
-    <script>
-        // Yükleme Ekranı Kontrolü
-        window.onload = function() {
-            setTimeout(function() {
-                document.getElementById('loader-overlay').style.opacity = "0";
-                document.getElementById('main-site').style.opacity = "1";
-                setTimeout(function() { document.getElementById('loader-overlay').style.display = "none"; }, 800);
-            }, 2000);
-        };
-
-        // Yorum Ekleme Fonksiyonu
-        function addComment() {
-            var name = document.getElementById('userName').value;
-            var text = document.getElementById('userComment').value;
-
-            if(name && text) {
-                var list = document.getElementById('commentList');
-                var newItem = document.createElement('div');
-                newItem.className = 'comment-item';
-                newItem.innerHTML = '<div class="comment-name">' + name + '</div><div class="comment-text">' + text + '</div>';
-                
-                list.insertBefore(newItem, list.firstChild);
-                
-                // Formu temizle
-                document.getElementById('userName').value = "";
-                document.getElementById('userComment').value = "";
-                alert("Mesajınız Sait Bey'in özel kalemine iletildi. Teşekkür ederiz.");
-            } else {
-                alert("Lütfen tüm alanları doldurun.");
-            }
-        }
-    </script>
+    <div class="footer">
+        <p>© 2026 Özer Aşireti Dijital Birimi</p>
+    </div>
 </body>
 </html>

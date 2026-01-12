@@ -2,56 +2,114 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Özer Aşireti Sosyal Yardımlaşma ve Dayanışma Portalı</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Özer Aşireti | Kalender Apartmanı Tarihi Dönüşüm</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: #f0f2f5; }
-        .header { background: #1a237e; color: white; padding: 20px; text-align: center; border-bottom: 5px solid #ffd700; }
-        .nav { background: #fff; padding: 10px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .nav a { margin: 0 15px; text-decoration: none; color: #1a237e; font-weight: bold; }
-        .main-container { display: flex; padding: 20px; gap: 20px; max-width: 1200px; margin: auto; }
-        .news-section { flex: 3; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .sidebar { flex: 1; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .footer { background: #1a237e; color: white; text-align: center; padding: 20px; margin-top: 20px; }
+        body { margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f4f4; }
+
+        /* RENK DİZAYNI: ÜSTTE KIRMIZI, ORTADA BEYAZ, ALTTA YEŞİL */
+        .top-stripe { background-color: #b30000; height: 15px; width: 100%; position: fixed; top: 0; z-index: 2000; }
+        .mid-stripe { background-color: #ffffff; height: 10px; width: 100%; position: fixed; top: 15px; z-index: 2000; }
+        .bot-stripe { background-color: #1b5e20; height: 10px; width: 100%; position: fixed; top: 25px; z-index: 2000; }
+
+        .header { background: #0a192f; color: white; padding: 60px 20px 20px; text-align: center; border-bottom: 5px solid #ffd700; margin-top: 35px; }
+        
+        .main-container { max-width: 900px; margin: 30px auto; padding: 20px; }
+
+        .news-card { 
+            background: white; 
+            border-radius: 15px; 
+            overflow: hidden; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            border-left: 10px solid #b30000;
+        }
+
+        .news-content { padding: 40px; }
+
+        .headline { 
+            color: #0a192f; 
+            font-size: 32px; 
+            font-weight: 800; 
+            line-height: 1.2; 
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .sub-headline { 
+            color: #b30000; 
+            font-size: 20px; 
+            font-weight: 600; 
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+
+        .story { 
+            font-size: 18px; 
+            line-height: 1.8; 
+            color: #333; 
+            text-align: justify; 
+        }
+
+        .highlight-box { 
+            background: #fdfdfd; 
+            border: 2px dashed #1b5e20; 
+            padding: 25px; 
+            margin: 30px 0; 
+            border-radius: 10px;
+        }
+
+        .footer { 
+            background: #0a192f; 
+            color: white; 
+            text-align: center; 
+            padding: 30px; 
+            margin-top: 50px; 
+            border-top: 5px solid #1b5e20;
+        }
+
+        .tag { background: #b30000; color: white; padding: 5px 15px; border-radius: 5px; font-size: 14px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <h1>ÖZER AŞİRETİ DİJİTAL PORTALI</h1>
-    <p>Birlik, Beraberlik ve Gelenek</p>
-</div>
+<div class="top-stripe"></div>
+<div class="mid-stripe"></div>
+<div class="bot-stripe"></div>
 
-<div class="nav">
-    <a href="#">ANASAYFA</a>
-    <a href="#">AŞİRET TARİHİ</a>
-    <a href="#">BÜYÜKLERİMİZ</a>
-    <a href="#">İŞ DÜNYASI</a>
-    <a href="#">İLETİŞİM</a>
+<div class="header">
+    <h1>ÖZER AŞİRETİ HABER MERKEZİ</h1>
+    <p>Sait Özer Himayesinde Resmi Yayın Organı</p>
 </div>
 
 <div class="main-container">
-    <div class="news-section">
-        <h2 style="color: #1a237e; border-bottom: 2px solid #ffd700; padding-bottom: 10px;">Aşiretten Güncel Haberler</h2>
-        <div style="background: #e8eaf6; padding: 15px; margin-bottom: 15px; border-radius: 5px;">
-            <h3>Gençlik Buluşması Haftaya Yapılacak</h3>
-            <p>Aşiretimizin genç temsilcileri önümüzdeki hafta sonu büyük bir organizasyonla bir araya geliyor...</p>
-        </div>
-        <div style="background: #e8eaf6; padding: 15px; border-radius: 5px;">
-            <h3>Eğitim Bursu Başvuruları Başladı</h3>
-            <p>Özer Aşireti Eğitim Vakfı tarafından üniversite öğrencilerine verilecek olan burs başvuruları bugün itibarıyla açılmıştır.</p>
-        </div>
-    </div>
+    <div class="news-card">
+        <div class="news-content">
+            <span class="tag">ÖZEL DOSYA</span>
+            <h1 class="headline">KALENDER APARTMANI: <br>BİR VEFA VE FEDAKARLIK DESTANI</h1>
+            <p class="sub-headline">"Sait Özer, Halkın Rızasını İmarın Temeline Koydu"</p>
+            
+            <div class="story">
+                <p>Özer Aşireti'nin en köklü miraslarından biri olan, bitişik iki binadan müteşekkil <strong>Kalender Apartmanı</strong>, bugünlerde tarihe tanıklık eden bir dönüşüm yaşıyor. Sait Bey, aşiretin hafızasını temsil eden bu yapıları, sessiz sedasız ama dev bir fedakarlıkla tadilata aldı.</p>
+                
+                <div class="highlight-box">
+                    <strong style="color: #1b5e20; font-size: 20px;">HALKIN RIZASIYLA GELEN DİJİTAL VE FİZİKİ DÖNÜŞÜM</strong><br><br>
+                    Bu proje sadece taşın ve tuğlanın yenilenmesi değil, komşuluk hukukunun ve halkın gönlünün kazanılması davasıdır. Sait Bey, hiçbir siyasi veya maddi kaygı gütmeden, mahalle sakinlerinin ve aşiret mensuplarının rızasını tek tek alarak bu büyük yükün altına girmiştir.
+                </div>
 
-    <div class="sidebar">
-        <h3 style="color: #1a237e;">Önemli Duyurular</h3>
-        <p style="font-size: 14px; border-left: 3px solid #ffd700; padding-left: 10px;">
-            Sait Özer Beyefendi'nin mesajı: "Birliğimiz, en büyük gücümüzdür."
-        </p>
+                <p>İki binanın birleşen duvarları, tıpkı aşiretin birbirine kenetlenen fertleri gibi yenileniyor. Sait Bey’in bu gizemli ve bir o kadar da takdire şayan hamlesi, halk nezdinde büyük bir sevgi seliyle karşılık buldu. Kalender Apartmanı, artık sadece bir bina değil; liderin fedakarlığının ve halkın rızasının vücut bulmuş halidir.</p>
+            </div>
+
+            <div style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; color: #666; font-size: 14px;">
+                <strong>Haber Kaynağı:</strong> Özer Stratejik İletişim Merkezi (ÖSİM) <br>
+                <strong>Tarih:</strong> 12 Ocak 2026
+            </div>
+        </div>
     </div>
 </div>
 
 <div class="footer">
-    <p>&copy; 2026 Özer Aşireti Sosyal Medya Grubu. Tüm Hakları Sait Özer Himayesindedir.</p>
+    <p>ÖZER AŞİRETİ RESMİ PORTALI</p>
+    <p style="font-size: 12px; opacity: 0.8;">Birlik, Beraberlik ve Geleneksel Adalet</p>
 </div>
 
 </body>

@@ -3,176 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Özer Aşireti | Büyük Divan</title>
+    <title>Özer Aşireti | Büyük Meydan</title>
     <style>
         body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #0a192f; color: #333; }
+        
+        /* GİRİŞ EKRANI */
+        #girisEkrani { display: flex; align-items: center; justify-content: center; height: 100vh; background: #0a192f; }
+        .giris-kutu { background: white; padding: 30px; border-radius: 20px; width: 300px; text-align: center; border-top: 6px solid #b30000; }
+        .giris-kutu input { width: 100%; padding: 12px; margin: 15px 0; border-radius: 25px; border: 1px solid #ccc; outline: none; box-sizing: border-box; text-align: center; }
+        .giris-btn { background: #1b5e20; color: white; border: none; padding: 12px; width: 100%; border-radius: 25px; cursor: pointer; font-weight: bold; }
+
+        /* MEYDAN EKRANI */
+        #meydanEkrani { display: none; background: #f0f2f5; min-height: 100vh; }
         .header { background: #0a192f; color: white; padding: 15px; text-align: center; border-bottom: 4px solid #ffd700; position: sticky; top:0; z-index:100; }
         
-        .chat-area { max-width: 900px; margin: 10px auto; background: #f0f2f5; height: 80vh; display: flex; flex-direction: column; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
+        .chat-area { max-width: 800px; margin: 0 auto; height: 80vh; display: flex; flex-direction: column; }
         .msgs { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
 
-        /* LİDER MESAJI (SOLDA) */
-        .msg-lider { align-self: flex-start; max-width: 80%; background: #fffdf0; border: 3px solid #ffd700; padding: 15px; border-radius: 0 25px 25px 25px; box-shadow: 5px 5px 15px rgba(255,215,0,0.3); }
-        .name-lider { color: #b38f00; font-weight: bold; font-size: 16px; border-bottom: 1px solid #ffd700; margin-bottom: 5px; display: block; }
-
-        /* DİĞERLERİ VE BOTLAR (SAĞDA) */
-        .msg-diger { align-self: flex-end; max-width: 75%; background: white; padding: 12px; border-radius: 20px 20px 0 20px; border-right: 6px solid #1b5e20; box-shadow: -3px 3px 10px rgba(0,0,0,0.1); }
-        .name-diger { color: #1b5e20; font-weight: bold; font-size: 13px; display: block; margin-bottom: 5px; text-align: right; }
+        /* LİDER SOLDA - DİĞERLERİ SAĞDA */
+        .msg-lider { align-self: flex-start; background: #fffdf0; border: 2px solid #ffd700; padding: 12px; border-radius: 0 20px 20px 20px; width: 80%; box-shadow: 3px 3px 10px rgba(0,0,0,0.1); }
+        .msg-diger { align-self: flex-end; background: white; padding: 12px; border-radius: 20px 20px 0 20px; border-right: 6px solid #1b5e20; width: 75%; box-shadow: -2px 2px 10px rgba(0,0,0,0.05); }
         
-        .unvan-tag { font-size: 10px; background: #444; color: gold; padding: 2px 8px; border-radius: 5px; margin-left: 5px; font-weight: bold; }
+        .name-lider { color: #b38f00; font-weight: bold; display: block; margin-bottom: 5px; border-bottom: 1px solid #eee; }
+        .name-diger { color: #1b5e20; font-weight: bold; display: block; margin-bottom: 5px; text-align: right; border-bottom: 1px solid #eee; }
+        .unvan-tag { font-size: 10px; background: #444; color: gold; padding: 2px 6px; border-radius: 4px; margin-left: 5px; }
 
         /* YETKİ PANELİ */
-        #adminPanel { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #0a192f; padding: 25px; border-radius: 20px; display: none; z-index: 1000; border: 3px solid #ffd700; color: white; text-align: center; width: 320px; max-height: 80vh; overflow-y: auto; }
-        select { width: 100%; padding: 12px; margin: 15px 0; border-radius: 10px; background: #1a2a44; color: gold; border: 1px solid #ffd700; font-size: 14px; }
-        .adm-btn { width: 100%; padding: 12px; margin-top: 10px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; background: #b30000; color: white; }
+        #adminPanel { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #0a192f; padding: 25px; border-radius: 20px; display: none; z-index: 1000; border: 3px solid #ffd700; color: white; text-align: center; width: 300px; }
+        .adm-btn { width: 100%; padding: 10px; margin-top: 10px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; color: white; }
 
-        .input-bar { display: flex; padding: 20px; background: white; border-top: 1px solid #ddd; }
-        input { flex: 1; padding: 15px; border-radius: 30px; border: 1px solid #ccc; outline: none; }
-        .send-btn { background: #b30000; color: white; border: none; padding: 0 30px; border-radius: 30px; margin-left: 10px; cursor: pointer; font-weight: bold; }
+        .input-bar { display: flex; padding: 15px; background: white; border-top: 1px solid #ddd; position: sticky; bottom: 0; }
+        #mInp { flex: 1; padding: 12px; border-radius: 25px; border: 1px solid #ccc; outline: none; }
+        .send-btn { background: #b30000; color: white; border: none; padding: 10px 20px; border-radius: 25px; margin-left: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <div style="display:flex; justify-content: space-between; max-width: 900px; margin: 0 auto;">
-        <a href="index.html" style="color:#ffd700; text-decoration:none; font-size:12px; border:1px solid #ffd700; padding:4px 10px; border-radius:10px;">🏠 ANA MENÜ</a>
-        <span id="hosgeldin" style="color:gold; font-weight:bold;">Yükleniyor...</span>
+    <div id="girisEkrani">
+        <div class="giris-kutu">
+            <h2 style="margin:0; color:#b30000;">ÖZER DİVANI</h2>
+            <input type="text" id="isimGiris" placeholder="Ad Soyad Yazınız">
+            <button class="giris-btn" onclick="divanaGir()">MEYDANA İN</button>
+        </div>
     </div>
-</div>
 
-<div id="adminPanel">
-    <h3 id="targetName" style="margin:0; color:#ffd700;">İsim</h3>
-    <p style="font-size:12px; color:#aaa;">Aşiret Görevini Belirle:</p>
-    <select id="gorevSecimi">
-        <option value="AŞİRET VEKİLİ">AŞİRET VEKİLİ</option>
-        <option value="BAŞ MUHAFIZ">BAŞ MUHAFIZ</option>
-        <option value="İSTİHBARAT REİSİ">İSTİHBARAT REİSİ</option>
-        <option value="MALİYE SORUMLUSU">MALİYE SORUMLUSU</option>
-        <option value="DIŞ İLİŞKİLER">DIŞ İLİŞKİLER</option>
-        <option value="SINIR KOMUTANI">SINIR KOMUTANI</option>
-        <option value="TÖREN AMİRİ">TÖREN AMİRİ</option>
-        <option value="KADİM DANIŞMAN">KADİM DANIŞMAN</option>
-        <option value="SİNCAR SORUMLUSU">SİNCAR SORUMLUSU</option>
-        <option value="MEDYA REİSİ">MEDYA REİSİ</option>
-        <option value="KALE DİZDARI">KALE DİZDARI</option>
-        <option value="ADALET TEMSİLCİSİ">ADALET TEMSİLCİSİ</option>
-        <option value="SANCAKDAR">SANCAKDAR</option>
-        <option value="AŞİRET SÖZCÜSÜ">AŞİRET SÖZCÜSÜ</option>
-        <option value="AKSAKAL">AKSAKAL</option>
-        <option value="GENÇLİK KOLLARI BŞK.">GENÇLİK KOLLARI BŞK.</option>
-        <option value="BAŞ DANIŞMAN">BAŞ DANIŞMAN</option>
-        <option value="LOJİSTİK MÜDÜRÜ">LOJİSTİK MÜDÜRÜ</option>
-        <option value="ÖZEL KALEM">ÖZEL KALEM</option>
-        <option value="ÜYE">SADE ÜYE</option>
-    </select>
-    <button class="adm-btn" onclick="gorevAta()">MÜHRÜ BAS</button>
-    <button class="adm-btn" style="background:gray;" onclick="document.getElementById('adminPanel').style.display='none'">İPTAL</button>
-</div>
+    <div id="meydanEkrani">
+        <div class="header">
+            <h3 style="margin:0; color:gold;" id="hosgeldin">AŞİRET MEYDANI</h3>
+        </div>
 
-<div class="chat-area">
-    <div class="msgs" id="chatbox"></div>
-    <div class="input-bar">
-        <input type="text" id="mInp" placeholder="Kelamınızı yazın...">
-        <button class="send-btn" onclick="gonder()">GÖNDER</button>
+        <div id="adminPanel">
+            <h3 id="targetName" style="color:gold;">İsim</h3>
+            <select id="gorevSecimi" style="width:100%; padding:10px; margin:10px 0;">
+                <option value="AŞİRET VEKİLİ">AŞİRET VEKİLİ</option>
+                <option value="BAŞ MUHAFIZ">BAŞ MUHAFIZ</option>
+                <option value="İSTİHBARAT REİSİ">İSTİHBARAT REİSİ</option>
+                <option value="DIŞ İLİŞKİLER">DIŞ İLİŞKİLER</option>
+                <option value="MALİYE SORUMLUSU">MALİYE SORUMLUSU</option>
+                <option value="SINIR KOMUTANI">SINIR KOMUTANI</option>
+                <option value="TÖREN AMİRİ">TÖREN AMİRİ</option>
+                <option value="AKSAKAL">AKSAKAL</option>
+                <option value="KADİM DANIŞMAN">KADİM DANIŞMAN</option>
+                <option value="SİNCAR SORUMLUSU">SİNCAR SORUMLUSU</option>
+                <option value="KALE MUHAFIZI">KALE MUHAFIZI</option>
+                <option value="SANCAKDAR">SANCAKDAR</option>
+                <option value="MEDYA REİSİ">MEDYA REİSİ</option>
+                <option value="GENÇLİK KOLLARI BŞK.">GENÇLİK KOLLARI BŞK.</option>
+                <option value="ADALET TEMSİLCİSİ">ADALET TEMSİLCİSİ</option>
+                <option value="LOJİSTİK MÜDÜRÜ">LOJİSTİK MÜDÜRÜ</option>
+                <option value="ÖZEL KALEM">ÖZEL KALEM</option>
+                <option value="BİLGİN">BİLGİN</option>
+                <option value="SÖZCÜ">AŞİRET SÖZCÜSÜ</option>
+                <option value="ÜYE">SADE ÜYE</option>
+            </select>
+            <button class="adm-btn" style="background:#1b5e20;" onclick="gorevAta()">GÖREVİ VER</button>
+            <button class="adm-btn" style="background:#444;" onclick="document.getElementById('adminPanel').style.display='none'">KAPAT</button>
+        </div>
+
+        <div class="chat-area">
+            <div class="msgs" id="chatbox"></div>
+            <div class="input-bar">
+                <input type="text" id="mInp" placeholder="Kelamınızı bırakın...">
+                <button class="send-btn" onclick="gonder()">GÖNDER</button>
+            </div>
+        </div>
     </div>
-</div>
 
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
-<script>
-    const firebaseConfig = {
-        apiKey: "AIzaSyBJJEJO1FJCvPMF7n5LXX4DYrf3jBEvTlI",
-        authDomain: "ozer-asireti-portal.firebaseapp.com",
-        projectId: "ozer-asireti-portal",
-        storageBucket: "ozer-asireti-portal.firebasestorage.app",
-        messagingSenderId: "76823168812",
-        appId: "1:76823168812:web:e21ab7461ac3eec81b4e89"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBJJEJO1FJCvPMF7n5LXX4DYrf3jBEvTlI",
+            authDomain: "ozer-asireti-portal.firebaseapp.com",
+            projectId: "ozer-asireti-portal",
+            storageBucket: "ozer-asireti-portal.firebasestorage.app",
+            messagingSenderId: "76823168812",
+            appId: "1:76823168812:web:e21ab7461ac3eec81b4e89"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
 
-    const adim = localStorage.getItem('asiret_ad') || "Misafir";
-    const liderMi = (adim.toLowerCase() === "sait özer" || adim.toLowerCase() === "sait ozer");
-    document.getElementById('hosgeldin').innerHTML = adim + (liderMi ? " <span style='color:gold;'>[LİDER 👑]</span>" : " [ÜYE]");
+        let myAd = "";
+        let liderMi = false;
+        let seciliUser = "";
 
-    // 30 KİŞİLİK ÖZER ERKEK KADROSU
-    const bots = [
-        "Ahmet Özer", "Ali Özer", "Kadir Özer", "Baki Özer", "Kerem Özer", "HACI ABDULLAH ÖZER",
-        "Mustafa Özer", "Hüseyin Özer", "Bekir Özer", "Osman Özer", "Süleyman Özer", "Ramazan Özer",
-        "Mehmet Ali Özer", "Yusuf Özer", "Ömer Özer", "Hamza Özer", "Bilal Özer", "Salih Özer",
-        "Faruk Özer", "Halil Özer", "İsmail Özer", "Yakup Özer", "İshak Özer", "Murat Özer",
-        "Selim Özer", "Yavuz Özer", "Orhan Özer", "Mert Özer", "Burak Özer", "Cihan Özer"
-    ];
+        // 20 KİŞİLİK ÖZER KADROSU
+        const bots = [
+            "Ahmet Özer", "Ali Özer", "Kadir Özer", "Baki Özer", "HACI ABDULLAH ÖZER",
+            "Faruk Özer", "Mustafa Özer", "Remzi Özer", "Cihan Özer", "Ümran Özer",
+            "Veli Özer", "Mehmet Özer", "Süleyman Özer", "Osman Özer", "Hüseyin Özer",
+            "Yusuf Özer", "Hamza Özer", "Ömer Özer", "Bekir Özer", "Halil Özer"
+        ];
 
-    let seciliUser = "";
-
-    db.collection("sohbet").orderBy("tarih", "asc").onSnapshot(async (snaps) => {
-        const box = document.getElementById('chatbox');
-        box.innerHTML = "";
-        const rSnap = await db.collection("rutbeler").get();
-        const rMap = {}; rSnap.forEach(d => rMap[d.id] = d.data().rutbe);
-
-        snaps.forEach((doc) => {
-            const d = doc.data();
-            const isSait = (d.isim.toLowerCase() === "sait özer" || d.isim.toLowerCase() === "sait ozer");
-            const classMsg = isSait ? "msg-lider" : "msg-diger";
-            const className = isSait ? "name-lider" : "name-diger";
-            const gorev = rMap[d.isim] || (isSait ? "LİDER" : "ÜYE");
-
-            box.innerHTML += `
-                <div class="${classMsg}" onclick="panelAc('${d.isim}')">
-                    <span class="${className}">${d.isim} <span class="unvan-tag">${gorev}</span></span>
-                    <div class="msg-text">${d.mesaj}</div>
-                </div>`;
-        });
-        box.scrollTop = box.scrollHeight;
-    });
-
-    function gonder() {
-        const txt = document.getElementById('mInp').value;
-        if(!txt) return;
-        db.collection("sohbet").add({
-            isim: adim, mesaj: txt, tarih: firebase.firestore.FieldValue.serverTimestamp()
-        }).then(() => { akilliCevap(txt); });
-        document.getElementById('mInp').value = "";
-    }
-
-    function akilliCevap(txt) {
-        const k = txt.toLowerCase();
-        if(k.includes("selam") || k.includes("merhaba")) {
-            botYaz("Aleykümselam Liderim, hoş geldiniz.", 1500);
-            botYaz("Aleykümselam ağam.", 3000);
-        } else if(k.includes("nasılsın") || k.includes("nasılsınız")) {
-            botYaz("Seni gördük daha iyi olduk Sait Bey.", 1500);
-            botYaz("Şükür ağam, senin gölgende iyiyiz.", 3000);
+        function divanaGir() {
+            myAd = document.getElementById('isimGiris').value.trim();
+            if(myAd.length < 3) return alert("Lütfen isminizi tam yazın.");
+            
+            liderMi = (myAd.toLowerCase() === "sait özer" || myAd.toLowerCase() === "sait ozer");
+            
+            document.getElementById('girisEkrani').style.display = 'none';
+            document.getElementById('meydanEkrani').style.display = 'block';
+            document.getElementById('hosgeldin').innerHTML = myAd + (liderMi ? " <span style='color:gold;'>[LİDER 👑]</span>" : " [ÜYE]");
+            
+            dinle();
         }
-    }
 
-    function botYaz(m, s) {
-        setTimeout(() => {
-            db.collection("sohbet").add({
-                isim: bots[Math.floor(Math.random()*bots.length)],
-                mesaj: m, tarih: firebase.firestore.FieldValue.serverTimestamp()
+        function dinle() {
+            db.collection("sohbet").orderBy("tarih", "asc").onSnapshot(async (sn) => {
+                const box = document.getElementById('chatbox');
+                box.innerHTML = "";
+                const rSnap = await db.collection("rutbeler").get();
+                const rMap = {}; rSnap.forEach(d => rMap[d.id] = d.data().rutbe);
+
+                sn.forEach((doc) => {
+                    const d = doc.data();
+                    const isSait = (d.isim.toLowerCase().includes("sait özer") || d.isim.toLowerCase().includes("sait ozer"));
+                    const classMsg = isSait ? "msg-lider" : "msg-diger";
+                    const className = isSait ? "name-lider" : "name-diger";
+                    const gorev = rMap[d.isim] || (isSait ? "LİDER" : "ÜYE");
+
+                    box.innerHTML += `
+                        <div class="${classMsg}" onclick="panelAc('${d.isim}')">
+                            <span class="${className}">${d.isim} <span class="unvan-tag">${gorev}</span></span>
+                            <div>${d.mesaj}</div>
+                        </div>`;
+                });
+                box.scrollTop = box.scrollHeight;
             });
-        }, s);
-    }
-
-    function panelAc(isim) {
-        if(liderMi) {
-            seciliUser = isim;
-            document.getElementById('targetName').innerText = isim;
-            document.getElementById('adminPanel').style.display = "block";
         }
-    }
 
-    function gorevAta() {
-        const r = document.getElementById('gorevSecimi').value;
-        db.collection("rutbeler").doc(seciliUser).set({ rutbe: r }).then(() => {
-            alert(seciliUser + " rütbesi " + r + " yapıldı!");
-            document.getElementById('adminPanel').style.display = 'none';
-        });
-    }
-</script>
+        function gonder() {
+            const txt = document.getElementById('mInp').value;
+            if(!txt) return;
+            db.collection("sohbet").add({
+                isim: myAd, mesaj: txt, tarih: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                if(txt.toLowerCase().includes("selam")) botKonus("Aleykümselam ağam, hoş geldin.", 1500);
+                if(txt.toLowerCase().includes("nasılsın")) botKonus("Şükür Liderim, seni sormalı.", 2000);
+            });
+            document.getElementById('mInp').value = "";
+        }
+
+        function botKonus(m, s) {
+            setTimeout(() => {
+                db.collection("sohbet").add({
+                    isim: bots[Math.floor(Math.random()*bots.length)],
+                    mesaj: m, tarih: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            }, s);
+        }
+
+        function panelAc(isim) {
+            if(liderMi) {
+                seciliUser = isim;
+                document.getElementById('targetName').innerText = isim;
+                document.getElementById('adminPanel').style.display = "block";
+            }
+        }
+
+        function gorevAta() {
+            const r = document.getElementById('gorevSecimi').value;
+            db.collection("rutbeler").doc(seciliUser).set({ rutbe: r }).then(() => {
+                alert(seciliUser + " kişisine " + r + " görevi verildi.");
+                document.getElementById('adminPanel').style.display = 'none';
+            });
+        }
+    </script>
 </body>
 </html>

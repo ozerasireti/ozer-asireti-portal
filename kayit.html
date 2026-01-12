@@ -2,38 +2,39 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Özer Aşireti | Giriş Kapısı</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Özer Aşireti | Güvenli Kayıt</title>
     <style>
         body { background: #0a192f; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .box { background: white; color: #333; padding: 30px; border-radius: 15px; width: 90%; max-width: 350px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        h2 { color: #b30000; margin-bottom: 20px; }
-        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 25px; box-sizing: border-box; }
+        .box { background: white; color: #333; padding: 30px; border-radius: 15px; width: 90%; max-width: 350px; text-align: center; border-top: 10px solid #b30000; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 25px; box-sizing: border-box; }
         .btn { width: 100%; padding: 12px; border-radius: 25px; border: none; cursor: pointer; font-weight: bold; margin-top: 10px; transition: 0.3s; }
         .btn-reg { background: #1b5e20; color: white; }
         .btn-log { background: #0a192f; color: white; }
-        .link { font-size: 13px; color: #b30000; cursor: pointer; margin-top: 15px; display: block; text-decoration: underline; }
+        .status { font-size: 13px; margin-top: 15px; font-weight: bold; }
+        .toggle { font-size: 12px; color: #b30000; cursor: pointer; display: block; margin-top: 15px; text-decoration: underline; }
     </style>
 </head>
 <body>
 
 <div class="box">
-    <h2 id="baslik">ÜYE KAYDI</h2>
-    <p id="bilgi" style="font-size:12px;">E-postanıza onay linki gönderilecektir.</p>
+    <h2 id="title">AŞİRET KAYDI</h2>
+    <p id="subTitle" style="font-size:11px;">Meydan'a giriş için e-posta onayı zorunludur.</p>
     
-    <input type="email" id="email" placeholder="E-posta">
-    <input type="password" id="pass" placeholder="Şifre">
+    <input type="email" id="email" placeholder="E-posta Adresiniz">
+    <input type="password" id="pass" placeholder="Şifreniz">
     
-    <button id="islemBtn" class="btn btn-reg" onclick="baslat()">KAYIT OL & ONAY GÖNDER</button>
-    <span class="link" id="degistir" onclick="modDegis()">Zaten üyeyim, Giriş Yap</span>
-    <p id="sonuc" style="font-size:12px; margin-top:10px; font-weight:bold;"></p>
+    <button id="actionBtn" class="btn btn-reg" onclick="baslat()">KAYIT OL & ONAY GÖNDER</button>
+    <span class="toggle" id="toggleLink" onclick="modDegistir()">Zaten üyeyim, Giriş Yap</span>
+    
+    <div id="result" class="status"></div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
 <script>
-    const config = {
+    const firebaseConfig = {
         apiKey: "AIzaSyBJJEJO1FJCvPMF7n5LXX4DYrf3jBEvTlI",
         authDomain: "ozer-asireti-portal.firebaseapp.com",
         projectId: "ozer-asireti-portal",
@@ -41,38 +42,44 @@
         messagingSenderId: "76823168812",
         appId: "1:76823168812:web:e21ab7461ac3eec81b4e89"
     };
-    firebase.initializeApp(config);
+    if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
 
-    let girisModu = false;
+    let isLogin = false;
 
-    function modDegis() {
-        girisModu = !girisModu;
-        document.getElementById('baslik').innerText = girisModu ? "GİRİŞ YAP" : "ÜYE KAYDI";
-        document.getElementById('islemBtn').innerText = girisModu ? "GİRİŞ YAP" : "KAYIT OL & ONAY GÖNDER";
-        document.getElementById('islemBtn').className = girisModu ? "btn btn-log" : "btn btn-reg";
-        document.getElementById('degistir').innerText = girisModu ? "Hesabın yok mu? Kayıt Ol" : "Zaten üyeyim, Giriş Yap";
+    function modDegistir() {
+        isLogin = !isLogin;
+        document.getElementById('title').innerText = isLogin ? "ÜYE GİRİŞİ" : "AŞİRET KAYDI";
+        document.getElementById('actionBtn').innerText = isLogin ? "GİRİŞ YAP" : "KAYIT OL & ONAY GÖNDER";
+        document.getElementById('actionBtn').className = isLogin ? "btn btn-log" : "btn btn-reg";
+        document.getElementById('toggleLink').innerText = isLogin ? "Hesabım yok, Kayıt Ol" : "Zaten üyeyim, Giriş Yap";
     }
 
     function baslat() {
-        const email = document.getElementById('email').value;
-        const pass = document.getElementById('pass').value;
-        const s = document.getElementById('sonuc');
+        const mail = document.getElementById('email').value;
+        const sifre = document.getElementById('pass').value;
+        const res = document.getElementById('result');
+        res.innerText = "İşlem yapılıyor...";
 
-        if(girisModu) {
-            firebase.auth().signInWithEmailAndPassword(email, pass)
-            .then((u) => {
-                if(u.user.emailVerified) { window.location.href = "meydan.html"; }
-                else { s.style.color="orange"; s.innerText="Önce e-postanı onaylamalısın!"; }
+        if(isLogin) {
+            firebase.auth().signInWithEmailAndPassword(mail, sifre)
+            .then((userCredential) => {
+                if(userCredential.user.emailVerified) {
+                    window.location.href = "meydan.html";
+                } else {
+                    res.style.color = "orange";
+                    res.innerText = "DUR! E-postana gelen linke tıklamadın. Lütfen onay ver.";
+                }
             })
-            .catch(e => { s.style.color="red"; s.innerText="Hata: " + e.message; });
+            .catch(e => { res.style.color="red"; res.innerText = "Hata: " + e.message; });
         } else {
-            firebase.auth().createUserWithEmailAndPassword(email, pass)
-            .then((u) => {
-                u.user.sendEmailVerification().then(() => {
-                    s.style.color="green"; s.innerText="Onay maili gönderildi! Linke tıklayıp sonra giriş yapın.";
+            firebase.auth().createUserWithEmailAndPassword(mail, sifre)
+            .then((userCredential) => {
+                userCredential.user.sendEmailVerification().then(() => {
+                    res.style.color = "green";
+                    res.innerText = "MÜHÜRLÜ ONAY GÖNDERİLDİ! Mailini kontrol et, linke tıkla, sonra giriş yap.";
                 });
             })
-            .catch(e => { s.style.color="red"; s.innerText="Hata: " + e.message; });
+            .catch(e => { res.style.color="red"; res.innerText = "Hata: " + e.message; });
         }
     }
 </script>
